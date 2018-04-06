@@ -1,1 +1,3 @@
-# ME-499
+# ME 499/599: Computer Programming for Mechanical Systems
+
+"ME 499/599 is an introduction to the Python programming language, and how to use it practically for problems that mechanical engineers care about. We're going to assume that all students already have experience with some other modern programming language (Matlab, C, C++, Java, etc), and won't be digging into the basics of control flow structures and function calls. We will, however, be spending a fair amount of time on problem decomposition, appropriate use of data structures, and on some of the more useful Python modules, like matplotlib, numpy, and scipy."
