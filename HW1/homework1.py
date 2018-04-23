@@ -113,3 +113,60 @@ for y in range(1, np.size(lab_score_raw, 1)):
                 #converting non numbers to 0
     lab_avg_scores.append(np.mean(lab_score))
 print("Hardest Assignment: Lab", lab_avg_scores.index(min(lab_avg_scores)))
+
+
+
+#####  PART 3: GRADES
+a = 0
+a_minus = 0
+b_plus = 0
+b = 0
+b_minus = 0
+c_plus = 0
+c = 0
+c_minus = 0
+d_plus = 0
+d = 0
+d_minus = 0
+f = 0
+
+for x in finalScore:
+    if x > 94:
+        a = a + 1
+    elif x < 90 and x > 94:
+        a_minus = a_minus + 1
+    elif x < 90 and x > 87:
+        b_plus = b_plus + 1
+    elif x < 87 and x > 84:
+        b = b + 1
+    elif x < 84 and x > 80:
+        b_minus =  b_minus + 1
+    elif x < 80 and x > 77:
+        c_plus = c_plus + 1
+    elif x < 77 and x > 74:
+        c = c + 1
+    elif x < 74 and x > 70:
+        c_minus = c_minus + 1
+    elif x < 70 and x > 67:
+        d_plus = d_plus + 1
+    elif x < 67 and x > 64:
+        d = d + 1
+    elif x < 64 and x > 61:
+        d_minus =  d_minus + 1
+    else:
+        f = f + 1
+
+
+gradesTot = a + a_minus + b_plus + b + b_minus + c_plus + c + c_minus + d_plus + d + d_minus + f
+print("A:",a)
+print("A-:",a_minus)
+print("B+:",b_plus)
+print("B:",b)
+print("B-:",b_minus)
+print("C+:",c_plus)
+print("C:",c)
+print("C-:",c_minus)
+print("D+:",d_plus)
+print("D:",d)
+print("D-:",d_minus)
+print("F:",f)
