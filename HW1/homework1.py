@@ -15,7 +15,7 @@ labheader = []
 labheader_num = []
 lab_score_raw = []
 # convert to numpy array later
-hw_score = np.array([], dtype='f')
+hw_score_raw = np.array([], dtype='f')
 
 filename = 'grades.csv'
 with open(filename, 'r') as fp:
@@ -38,7 +38,7 @@ with open(filename, 'r') as fp:
                 labheader_num.append(x)
 
         for j in range(0, len(hwheader_num)):
-            hw_score = np.append(hw_score, row[hwheader_num[j]])
+            hw_score_raw = np.append(hw_score_raw, row[hwheader_num[j]])
             # http://akuederle.com/create-numpy-array-with-for-loop"
 
         for j in range(0, len(labheader_num)):
@@ -73,24 +73,24 @@ print("Above Median:", str(round(abvMedPer, 2))+"%")
 
 
 #####  PART 2: HARDEST ASSIGNMENT
-hw_score = np.reshape(hw_score, (len(finalScore)+1, 10))
+hw_score_raw = np.reshape(hw_score_raw, (len(finalScore)+1, 10))
 #https://docs.scipy.org/doc/numpy/reference/generated/numpy.reshape.html
 
-hw_score = np.delete(hw_score, (0), axis=0)
+hw_score_raw = np.delete(hw_score_raw, (0), axis=0)
 # some dumb bug is not letting me convert the np array to floats from str
 
 hw_avg_scores = []
-hw_raw = []
+hw_score = []
 
-for y in range(1, np.size(hw_score, 1)):
-    for x in range(0, np.size(hw_score, 0)):
+for y in range(1, np.size(hw_score_raw, 1)):
+    for x in range(0, np.size(hw_score_raw, 0)):
         #print(x)
         try:
-            hw_raw.append(float(hw_score[x, y]))
+            hw_score.append(float(hw_score_raw[x, y]))
         except ValueError:
-            hw_raw.append(0)
+            hw_score.append(0)
                 #converting non numbers to 0
-    hw_avg_scores.append(np.mean(hw_raw))
+    hw_avg_scores.append(np.mean(hw_score))
 
 print("Hardest Assignment: Homework", hw_avg_scores.index(min(hw_avg_scores)))
 
