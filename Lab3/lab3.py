@@ -5,10 +5,10 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
-import math as mth
+from math import pi
 import scipy
 
-x = np.arange(0,4*mth.pi,0.05)
+x = np.arange(0,4*pi,0.05)
 y = np.sin(x)
 
 #plt.plot(x,y)
@@ -31,3 +31,19 @@ plt.ylabel("Number of Occurences")
 plt.xlabel("Sum of 10 random Numbers")
 plt.show()
 
+
+### PART 4
+from msd import *
+
+smd = MassSpringDamper(m=10.0, k=10.0, c=1.0)
+state, t = smd.simulate(0.0, 1.0)
+
+# for s in state:
+#   print(s[0)
+import matplotlib.pyplot as plt
+
+plt.plot(state)
+plt.show()
+
+
+### PART 5
