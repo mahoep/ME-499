@@ -39,7 +39,7 @@ smd = MassSpringDamper(m=10.0, k=10.0, c=1.0)
 state, t = smd.simulate(0.0, 1.0)
 
 # for s in state:
-#   print(s[0)
+#   print(s[0)]
 import matplotlib.pyplot as plt
 
 plt.plot(state)
