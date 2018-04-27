@@ -28,7 +28,7 @@ if __name__ == '__main__':
     import matplotlib.pyplot as plt
     n = [1, 10, 100, 1000, 10000, 100000, 1000000]
     sum_time = rand_sum(n)
-    plt.plot(n, sum_time)
+    plt.semilogx(n, sum_time)
     plt.ylabel("Time (s)")
     plt.xlabel("Length of List")
     plt.show()

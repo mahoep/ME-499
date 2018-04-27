@@ -10,6 +10,7 @@ def rand_sort(n):
     '''
     from numpy import random as nprandom
     from time import time
+
     sort_time = []
     for i in range(len(n)):
         a = nprandom.random_sample((n[i],))
@@ -28,7 +29,8 @@ if __name__ == '__main__':
     import matplotlib.pyplot as plt
     n = [1, 10, 100, 1000, 10000, 100000, 1000000]
     sort_time = rand_sort(n)
-    plt.plot(n, sort_time)
+    print(sort_time)
+    plt.semilogx(n, sort_time)
     plt.ylabel("Time (s)")
     plt.xlabel("Length of List")
     plt.show()

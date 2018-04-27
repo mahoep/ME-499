@@ -47,14 +47,14 @@ plt.show()
 n = [1, 10, 100, 1000, 10000, 100000, 1000000]
 sort_time = rand_sort(n)
 
-plt.plot(n, sort_time)
+plt.semilogx(n, sort_time)
 plt.ylabel("Time (s)")
 plt.xlabel("Length of List")
 plt.show()
 
 sum_time = rand_sum(n)
 
-plt.plot(n, sum_time)
+plt.semilogx(n, sum_time)
 plt.ylabel("Time (s)")
 plt.xlabel("Length of List")
 plt.show()

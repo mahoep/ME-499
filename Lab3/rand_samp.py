@@ -11,7 +11,7 @@ def rand_samp(n):
     from numpy import random as nprandom
     u = []
     for i in range(n):
-        v = nprandom.random_sample(10,)
+        v = nprandom.uniform(0.0,1.0,10)
         # https://docs.scipy.org/doc/numpy-1.14.0/reference/generated/numpy.random.uniform.html
         u.append(sum(v))
     return u
