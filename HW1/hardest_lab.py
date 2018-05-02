@@ -16,4 +16,4 @@ def hardest_lab(headers, data):
             avg.append(np.mean(norm))
     lowest = min(avg)
 
-    return len(v)
+    return index[lowest]

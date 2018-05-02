@@ -21,7 +21,7 @@ def final_scores(headers, data):
             above_avg += 1
         if x > med_final_score:
             above_med += 1
-    above_avg_ratio = (len(scores) - above_avg) / len(scores) * 100
-    above_med_ratio = (len(scores) - above_med) / len(scores) * 100
+    above_avg_ratio = above_avg / len(scores) * 100
+    above_med_ratio = above_med / len(scores) * 100
 
     return [avg_final_score, above_avg_ratio, med_final_score, above_med_ratio], scores

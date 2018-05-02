@@ -6,9 +6,6 @@
 import time, csv, math, numpy as np
 #https://pythonspot.com/reading-csv-files-in-python/
 
-print("....Modules Imported....")
-print("")
-
 from read_in_headers import *
 from final_scores import *
 from hardest_assignment import *
@@ -26,8 +23,8 @@ final_stats, scores = final_scores(headers, data)
 
 print("Average Score:", "%.2f" % final_stats[0])
 print("Above Average:", "%.2f" % final_stats[1], '%')
-print("Average Score:", "%.2f" % final_stats[2])
-print("Above Average:", "%.2f" % final_stats[3], '%',"\n")
+print("Median Score:", "%.2f" % final_stats[2])
+print("Median Average:", "%.2f" % final_stats[3], '%',"\n")
 
 print("Hardest Assignment:", hardest_assignment(headers, data),"\n")
 print("Hardest Lab:", hardest_lab(headers, data),"\n")
@@ -39,4 +36,8 @@ for x in range(len(grades)):
 
 print("\n",complain(scores),"students will complain about their grade.")
 
-print(grade_cutoff(scores))
+print("\n","Grade Cutoffs:")
+grade_list = ["A","B","C","D"]
+cutoffs = grade_cutoff(scores)
+for x in range(len(grade_list)):
+    print(grade_list[x], cutoffs[x])

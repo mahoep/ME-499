@@ -20,7 +20,7 @@ def grade_dist(scores):
     for x in scores:
         if x > 94:
             a = a + 1
-        elif x < 90 and x > 94:
+        elif x < 94 and x > 90:
             a_minus = a_minus + 1
         elif x < 90 and x > 87:
             b_plus = b_plus + 1
