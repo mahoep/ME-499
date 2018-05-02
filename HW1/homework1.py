@@ -9,48 +9,35 @@ print("")
 print("....Modules Imported....")
 
 
-def read_in_csv(file):
+def read_in_csv(filename):
 
 
-    with open(file, 'r') as fp:
+    with open(filename, 'r') as fp:
+        time.sleep(0.25)
+        print("....Importing data from", filename, "....")
         read_obj = csv.reader(fp)
+
         headers = []
-        final_score = []
         count = 0
-
-
         for row in read_obj:
             if count == 0:
-                for i in range(len(row)):
-                    headers.append(row[i])
-
-            for x in range(len(row)):
-                if "Final Score" == headers[x]:
-                    try:
-                        final_score.append(float(row[x]))
-                    except ValueError:
-                        pass
-            count += 1
-    return final_score
+                headers.append(row)
 
 
-def read_in_np(file):
+def read_in_np(filename):
 
 
-    data = np.genfromtxt(file, delimiter=',')
+    data = np.genfromtxt(filename, delimiter=',')
     #https: // stackoverflow.com / questions / 3518778 / how - to - read - csv - into - record - array - in -numpy
-
     return data
 
-
 def read_in_csv_alt(file):
-    with open(file, 'r') as fp:
-        data_raw = csv.reader(fp,
+    with open(file, 'r') as f:
+        data_raw = csv.reader(f,
                                delimiter=',',
                                quotechar='"')
         data = [data for data in data_raw]
     return data
-
 
 def timing():
 
@@ -72,30 +59,6 @@ def timing():
     print(end)
 
 
-def final_score_stat(list):
-
-
-    avg_final_score = np.mean(list)
-    med_final_score = np.median(list)
-
-    above_avg = 0
-    above_med = 0
-    for x in list:
-        if x > avg_final_score:
-            above_avg += 1
-        if x > med_final_score:
-            above_med += 1
-    above_avg_ratio = (len(list) - above_avg)/len(list) * 100
-    above_med_ratio = (len(list) - above_med)/len(list) * 100
-
-    print("Average Score:", "%.2f" % avg_final_score)
-    print("Above Average:", "%.2f" % above_avg_ratio, '%')
-    print("Average Score:", "%.2f" % med_final_score)
-    print("Above Average:", "%.2f" % above_med_ratio, '%')
-
 if __name__ == '__main__':
 
-    file = 'grades.csv'
-    final_score = read_in_csv(file)
-    final_score_stat(final_score)
-
+    timing()
