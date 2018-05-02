@@ -15,6 +15,7 @@ from hardest_assignment import *
 from hardest_lab import *
 from grade_dist import *
 from complain import *
+from grade_cutoff import *
 
 file = 'grades.csv'
 headers = read_in_headers(file)
@@ -37,3 +38,5 @@ for x in range(len(grades)):
     print(grade_list[x],grades[x])
 
 print("\n",complain(scores),"students will complain about their grade.")
+
+print(grade_cutoff(scores))
