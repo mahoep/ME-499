@@ -19,15 +19,6 @@ def read_in_csv(file):
         read_obj = csv.reader(fp)
         headers = []
         final_score = []
-        hw1 = []
-        hw2 = []
-        hw3 = []
-        hw4 = []
-        hw5 = []
-        hw6 = []
-        hw7 = []
-        hw8 = []
-        hw9 = []
         count = 0
 
 
@@ -38,60 +29,15 @@ def read_in_csv(file):
 
             for x in range(len(row)):
                 if "Final Score" == headers[x]:
+                    idx = x
                     try:
                         final_score.append(float(row[x]))
                     except ValueError:
                         pass
 
-                if "Homework 1" in headers[x]:
-                    try:
-                        hw1.append(float(row[x]))
-                    except ValueError:
-                        pass
-                if "Homework 2" in headers[x]:
-                    try:
-                        hw2.append(float(row[x]))
-                    except ValueError:
-                        pass
-                if "Homework 3" in headers[x]:
-                    try:
-                        hw3.append(float(row[x]))
-                    except ValueError:
-                        pass
-                if "Homework 4" in headers[x]:
-                    try:
-                        hw4.append(float(row[x]))
-                    except ValueError:
-                        pass
-                if "Homework 5" in headers[x]:
-                    try:
-                        hw5.append(float(row[x]))
-                    except ValueError:
-                        pass
-                if "Homework 6" in headers[x]:
-                    try:
-                        hw6.append(float(row[x]))
-                    except ValueError:
-                        pass
-                if "Homework 7" in headers[x]:
-                    try:
-                        hw7.append(float(row[x]))
-                    except ValueError:
-                        pass
-                if "Homework 8" in headers[x]:
-                    try:
-                        hw8.append(float(row[x]))
-                    except ValueError:
-                        pass
-                if "Homework 9" in headers[x]:
-                    try:
-                        hw9.append(float(row[x]))
-                    except ValueError:
-                        pass
             count += 1
-        hw_scores = [hw1,hw2,hw3,hw4,hw5,hw6,hw7,hw8,hw9]
 
-    return final_score, hw_scores
+    return final_score, idx
 
 
 def read_in_np(file):
@@ -176,5 +122,5 @@ if __name__ == '__main__':
     print("Average Score:", "%.2f" % final_score_data[2])
     print("Above Average:", "%.2f" % final_score_data[3], '%')
 
-
-    print(hw_scores)
+    data = read_in_np(file)
+    print(data[1:, 91])
