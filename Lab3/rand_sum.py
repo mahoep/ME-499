@@ -17,7 +17,7 @@ def rand_sum(n):
 
         start_time = time()
         sum(a)
-        end_time = time() - start_time
+        end_time = (time() - start_time) * 1000
         sum_time.append(end_time)
 
     return sum_time
