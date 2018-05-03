@@ -18,7 +18,7 @@ def rand_sort(n):
 
         start_time = time()
         sorted(a)
-        end_time = time() - start_time
+        end_time = (time() - start_time) * 1000
         sort_time.append(end_time)
 
     return sort_time
