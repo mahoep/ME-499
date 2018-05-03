@@ -4,6 +4,12 @@
 '''
 
 def hardest_assignment(headers, data):
+    '''
+    Calculates the most difficult homework assignment in grades.csv based on lowest average
+    :requires a list with the headers from the csv file
+    :requires a numpy array with all of the data from csv file
+    :returns assignment with lowest average
+    '''
     import numpy as np
     index = {}
     avg = []

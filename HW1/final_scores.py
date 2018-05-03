@@ -4,6 +4,11 @@
 '''
 
 def final_scores(headers, data):
+    '''
+    Calculates the final scores of the grades.csv file
+    :requires a list with the headers from the csv file
+    :requires a numpy array with all of the data from csv file
+    '''
     import numpy as np
     for x in range(len(headers)):
         if "Final Score" == headers[x]:

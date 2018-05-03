@@ -4,7 +4,11 @@
 '''
 
 def complain(scores):
-
+    '''
+        Calculates the number of students that are within 0.5% of the next grade up
+        :requires a list with the final scores
+        :returns number of students that are within 0.5% of the next grade up
+    '''
     num_complain = 0
     for x in scores:
         if 94 - x <= 0.5 and 94 - x > 0:

@@ -4,6 +4,11 @@
 '''
 
 def grade_dist(scores):
+    '''
+        Calculates the grade breakdown from the final scores
+        :requires a list with the final scores
+        :returns a list of grades
+    '''
     a = 0
     a_minus = 0
     b_plus = 0

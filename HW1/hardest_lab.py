@@ -3,6 +3,12 @@
    @author Matthew Hoeper
 '''
 def hardest_lab(headers, data):
+    '''
+        Calculates the most difficult lab in grades.csv based on lowest average
+        :requires a list with the headers from the csv file
+        :requires a numpy array with all of the data from csv file
+        :returns lab with lowest average
+        '''
     import numpy as np
     index = {}
     avg = []
