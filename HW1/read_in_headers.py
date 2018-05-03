@@ -9,6 +9,7 @@ def read_in_headers(file):
     Reads in the csv file and stores the necessary data in arrays
     :requires .csv files:
     '''
+    # https://pythonspot.com/reading-csv-files-in-python/
     with open(file, 'r') as fp:
         read_obj = csv.reader(fp)
         headers = []

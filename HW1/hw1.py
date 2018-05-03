@@ -3,8 +3,7 @@
    @author Matthew Hoeper
 '''
 
-import time, csv, math, numpy as np
-#https://pythonspot.com/reading-csv-files-in-python/
+import numpy as np
 
 from read_in_headers import *
 from final_scores import *
@@ -21,7 +20,7 @@ data = np.genfromtxt(file, delimiter=',')
 
 final_stats, scores = final_scores(headers, data)
 
-print("Average Score:", "%.2f" % final_stats[0])
+print("\n", "Average Score:", "%.2f" % final_stats[0])
 print("Above Average:", "%.2f" % final_stats[1], '%')
 print("Median Score:", "%.2f" % final_stats[2])
 print("Median Average:", "%.2f" % final_stats[3], '%',"\n")
