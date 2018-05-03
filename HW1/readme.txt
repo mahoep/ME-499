@@ -4,6 +4,8 @@ hw1.py is the parent file and all other files are imported into hw1.py
 Modules used:
 numpy, csv
 
+tested on windows 10, ubuntu 16.04 with python3.5 and 3.6
+
 hw1.py imports the functions from all other files as well as importing the data from csv using
 	a numpy function called genfromtext().
 
