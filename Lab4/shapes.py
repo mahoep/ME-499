@@ -2,12 +2,13 @@
 '''
     @author Matthew Hoeper
 '''
-class circle:
+
+
+class Circle:
     def __init__(self, radius):
         self.radius = radius
 
     def area(self):
-
         return pi * self.radius * self.radius
 
     def diameter(self):
@@ -17,7 +18,7 @@ class circle:
         return 2 * pi * self.radius
 
 
-class rectangle:
+class Rectangle:
     def __init__(self, length, width):
         self.length = length
         self.width = width
@@ -31,5 +32,7 @@ class rectangle:
 
 if __name__ == '__main__':
     from math import pi
-    c = circle(1.2)
-    print(c.area())
+    c = Circle(1.2)
+    r = Rectangle(3, 4)
+    print('Circle, Area: {}, Diameter: {}, Circumference: {}'.format(c.area(), c.diameter(), c.perimeter()))
+    print('Rectangle, Area: {}, Perimeter: {}'.format(r.area(), r.perimeter()))
