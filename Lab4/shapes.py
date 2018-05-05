@@ -6,14 +6,15 @@ class circle:
     def __init__(self, radius):
         self.radius = radius
 
-    def area(self, radius):
-        return pi * radius * radius
+    def area(self):
 
-    def diameter(self, radius):
-        return 2 * radius
+        return pi * self.radius * self.radius
 
-    def perimeter(self, radius):
-        return 2 * pi * radius
+    def diameter(self):
+        return 2 * self.radius
+
+    def perimeter(self):
+        return 2 * pi * self.radius
 
 
 class rectangle:
@@ -21,14 +22,14 @@ class rectangle:
         self.length = length
         self.width = width
 
-    def area(self, length, width):
-        return length * width
+    def area(self):
+        return self.length * self.width
 
-    def perimeter(self, length, width):
-        return 2 * length + 2 * width
+    def perimeter(self):
+        return 2 * self.length + 2 * self.width
+
 
 if __name__ == '__main__':
     from math import pi
     c = circle(1.2)
-    area = c.area(1.2)
-    print(area)
+    print(c.area())
