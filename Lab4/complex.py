@@ -17,15 +17,17 @@ class Complex:
         return r
 
     def __add__(self, other):
-        
-        if self.im < 0:
-            r = '({} - {}i)'.format(self.re, abs(self.im))
-        else:
-            r = '({} + {}i)'.format(self.re, self.im)
-        return other
+        try:
+            re = self.re + other.re
+            im = self.im + other.im
+        except:
+            re = self.re + other
+            im = self.im
+
+        return '({} + {}i)'.format(re, im)
 
     def __radd__(self, other):
-        return self
+        return self.__add__(other)
 
 
 if __name__ == '__main__':
@@ -44,6 +46,6 @@ if __name__ == '__main__':
 
     a = Complex(1, 2)
     b = Complex(3, 4)
-    print(a + b)     # (4 + 6i)
-    print(a + 1)     # (2 + 2i)
-    #print(1 + a)     # (2 + 2i)
+    print(a + b)  # (4 + 6i)
+    print(a + 1)  # (2 + 2i)
+    print(1 + a)     # (2 + 2i)
