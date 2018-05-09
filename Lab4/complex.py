@@ -9,18 +9,24 @@ class Complex:
         self.re = re
         self.im = im
 
-        if im < 0:
-            r = '{} - {}i'.format(self.re, abs(self.im))
-        else:
-            r = '{} + {}i'.format(self.re, self.im)
-        return print(r)
-
     def __str__(self, re=0, im=0):
         if self.im < 0:
             r = '({} - {}i)'.format(self.re, abs(self.im))
         else:
             r = '({} + {}i)'.format(self.re, self.im)
         return r
+
+    def __add__(self, other):
+        
+        if self.im < 0:
+            r = '({} - {}i)'.format(self.re, abs(self.im))
+        else:
+            r = '({} + {}i)'.format(self.re, self.im)
+        return other
+
+    def __radd__(self, other):
+        return self
+
 
 if __name__ == '__main__':
     a = Complex(1.0, 2.3)  # 1 + 2.3i
@@ -31,3 +37,13 @@ if __name__ == '__main__':
     b = Complex(1, -2)
     print(a)
     print(b)
+
+    c = Complex(1.2, 3.4)
+    print(c.im)
+    print(c.re)
+
+    a = Complex(1, 2)
+    b = Complex(3, 4)
+    print(a + b)     # (4 + 6i)
+    print(a + 1)     # (2 + 2i)
+    #print(1 + a)     # (2 + 2i)
