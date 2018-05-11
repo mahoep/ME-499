@@ -5,6 +5,10 @@
 
 
 class Circle:
+
+    from math import pi
+    global pi
+
     def __init__(self, radius):
         self.radius = radius
 
@@ -31,7 +35,7 @@ class Rectangle:
 
 
 if __name__ == '__main__':
-    from math import pi
+
     c = Circle(1.2)
     r = Rectangle(3, 4)
     print('Circle, Area: {}, Diameter: {}, Circumference: {}'.format(c.area(), c.diameter(), c.perimeter()))
