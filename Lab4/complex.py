@@ -29,6 +29,26 @@ class Complex:
     def __radd__(self, other):
         return self.__add__(other)
 
+    def __sub__(self, other):
+        try:
+            re = self.re - other.re
+            im = self.im - other.im
+        except:
+            re = self.re - other
+            im = self.im
+
+        return '({} + {}i)'.format(re, im)
+
+    def __rsub__(self, other):
+        try:
+            re = other.re - self.re
+            im = other.im - self.im
+        except:
+            re = other - self.re
+            im = self.im
+
+        return '({} + {}i)'.format(re, im)
+
 
 if __name__ == '__main__':
     a = Complex(1.0, 2.3)  # 1 + 2.3i
@@ -49,3 +69,7 @@ if __name__ == '__main__':
     print(a + b)  # (4 + 6i)
     print(a + 1)  # (2 + 2i)
     print(1 + a)     # (2 + 2i)
+
+    print(a - b)
+    print(a - 1)
+    print(1 - a)
