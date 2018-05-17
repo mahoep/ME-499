@@ -16,6 +16,9 @@ class Complex:
         else:
             raise TypeError('Imaginary part must be an integer or float')
 
+    def __repr__(self):
+        return self.__str__()
+
     def __str__(self, re=0, im=0):
         if self.im < 0:
             r = '({} - {}i)'.format(self.re, abs(self.im))
