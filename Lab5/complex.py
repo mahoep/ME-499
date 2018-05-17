@@ -76,7 +76,7 @@ class Complex:
     def __truediv__(self, other):
         try:
             re = (self.re * other.re + self.im * other.im) / (other.re**2 + other.im**2)
-            im = (self.im * other.re + self.re * other.im) / (other.re**2 + other.im**2)
+            im = (self.im * other.re - self.re * other.im) / (other.re**2 + other.im**2)
         except:
             re = self.re/other
             im = self.im/other
@@ -84,7 +84,13 @@ class Complex:
         return Complex(re, im)
 
     def __rtruediv__(self, other):
-        return self.__truediv__(other)
+        if isinstance(other, int) or isinstance(other, float):
+            re = (other * self.re) / (self.re**2 + self.im**2)
+            im = (-other * self.im) / (self.re**2 + self.im**2)
+
+            return Complex(re, im)
+        else:
+            return self.__truediv__(other)
 
     def __neg__(self):
         re = self.re * -1

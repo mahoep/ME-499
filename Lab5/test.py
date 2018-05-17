@@ -86,6 +86,7 @@ def add_check():
         if re_diff > 1e-8 or im_diff > 1e-8:
             complex_fail += 1
 
+
     return 'Number of times integer addition resulted in a difference: {} \n\
 Number of times float addition resulted in a difference: {} \n\
 Number of times complex addition resulted in a difference: {}'\
@@ -196,7 +197,7 @@ def sub_check():
         if re_diff > 1e-8 or im_diff > 1e-8:
             complex_fail += 1
 
-        return 'Number of times integer subtraction resulted in a difference: {} \n\
+    return 'Number of times integer subtraction resulted in a difference: {} \n\
 Number of times float subtraction resulted in a difference: {} \n\
 Number of times complex subtraction resulted in a difference: {}'\
 .format(int_fail, float_fail, complex_fail)
@@ -251,7 +252,7 @@ def rsub_check():
         if re_diff > 1e-8 or im_diff > 1e-8:
             complex_fail += 1
 
-        return 'Number of times right integer subtraction resulted in a difference: {} \n\
+    return 'Number of times right integer subtraction resulted in a difference: {} \n\
 Number of times right float subtraction resulted in a difference: {} \n\
 Number of times right complex subtraction resulted in a difference: {}'\
 .format(int_fail, float_fail, complex_fail)
@@ -306,7 +307,7 @@ def mul_check():
         if re_diff > 1e-8 or im_diff > 1e-8:
             complex_fail += 1
 
-        return 'Number of times integer multiplication resulted in a difference: {} \n\
+    return 'Number of times integer multiplication resulted in a difference: {} \n\
 Number of times float multiplication resulted in a difference: {} \n\
 Number of times complex multiplication resulted in a difference: {}' \
 .format(int_fail, float_fail, complex_fail)
@@ -361,19 +362,166 @@ def rmul_check():
         if re_diff > 1e-8 or im_diff > 1e-8:
             complex_fail += 1
 
-        return 'Number of times right integer multiplication resulted in a difference: {} \n\
+    return 'Number of times right integer multiplication resulted in a difference: {} \n\
 Number of times right float multiplication resulted in a difference: {} \n\
 Number of times right complex multiplication resulted in a difference: {}'\
 .format(int_fail, float_fail, complex_fail)
 
+def tdiv_check():
+    tests = 1000
+    r = 100
+    int_fail = 0
+    float_fail = 0
+    complex_fail = 0
+    print('### Division Check ({} tests) ###'.format(tests))
+
+    for i in range(tests):
+        re = random.randint(-r, r)
+        im = random.randint(-r, r)
+        num = random.randint(-r, r)
+
+        while num == 0:
+            num = random.randint(-r, r)
+
+        while re == 0 and im == 0:
+            re = random.randint(-r, r)
+            im = random.randint(-r, r)
+
+        a = Complex(re, im) / num
+        b = complex(re, im) / num
+
+        re_diff = abs(a.re - b.real)
+        im_diff = abs(a.im - b.imag)
+
+        if re_diff > 1e-8 or im_diff > 1e-8:
+            int_fail += 1
+
+    for i in range(tests):
+        re = random.randint(-r, r)
+        im = random.randint(-r, r)
+        num = random.randint(-r, r) + random.random()
+
+        while re == 0 and im == 0:
+            re = random.randint(-r, r)
+            im = random.randint(-r, r)
+
+        a = Complex(re, im) / num
+        b = complex(re, im) / num
+
+        re_diff = abs(a.re - b.real)
+        im_diff = abs(a.im - b.imag)
+
+        if re_diff > 1e-8 or im_diff > 1e-8:
+            float_fail += 1
+
+    for i in range(tests):
+        re1 = random.randint(-r, r)
+        im1 = random.randint(-r, r)
+        re2 = random.randint(-r, r)
+        im2 = random.randint(-r, r)
+
+        while re2 == 0 and im2 == 0:
+            re2 = random.randint(-r, r)
+            im2 = random.randint(-r, r)
+
+        a = Complex(re1, im1) / Complex(re2, im2)
+        b = complex(re1, im1) / complex(re2, im2)
+
+        re_diff = abs(a.re - b.real)
+        im_diff = abs(a.im - b.imag)
+
+        if re_diff > 1e-8 or im_diff > 1e-8:
+            complex_fail += 1
+
+    return 'Number of times integer division resulted in a difference: {} \n\
+Number of times float division resulted in a difference: {} \n\
+Number of times complex division resulted in a difference: {}' \
+.format(int_fail, float_fail, complex_fail)
+
+def rtdiv_check():
+
+    tests = 1000
+    r = 100
+    int_fail = 0
+    float_fail = 0
+    complex_fail = 0
+    print('### Right Division Check ({} tests) ###'.format(tests))
+
+    for i in range(tests):
+        re = random.randint(-r, r)
+        im = random.randint(-r, r)
+        num = random.randint(-r, r)
+
+        while num == 0:
+            num = random.randint(-r, r)
+
+        while re == 0 and im == 0:
+            re = random.randint(-r, r)
+            im = random.randint(-r, r)
+
+        a = num / Complex(re, im)
+        b = num / complex(re, im)
+
+        re_diff = abs(a.re - b.real)
+        im_diff = abs(a.im - b.imag)
+
+        if re_diff > 1e-8 or im_diff > 1e-8:
+            int_fail += 1
+
+    for i in range(tests):
+        re = random.randint(-r, r)
+        im = random.randint(-r, r)
+        num = random.randint(-r, r) + random.random()
+
+        while re == 0 and im == 0:
+            re = random.randint(-r, r)
+            im = random.randint(-r, r)
+
+        a = num / Complex(re, im)
+        b = num / complex(re, im)
+
+        re_diff = abs(a.re - b.real)
+        im_diff = abs(a.im - b.imag)
+
+        if re_diff > 1e-8 or im_diff > 1e-8:
+            float_fail += 1
+
+    for i in range(tests):
+        re1 = random.randint(-r, r)
+        im1 = random.randint(-r, r)
+        re2 = random.randint(-r, r)
+        im2 = random.randint(-r, r)
+
+        while re1 == 0 and im1 == 0:
+            re1 = random.randint(-r, r)
+            im1 = random.randint(-r, r)
+
+        a = Complex(re2, im2) / Complex(re1, im1)
+        b = complex(re2, im2) / complex(re1, im1)
+
+        re_diff = abs(a.re - b.real)
+        im_diff = abs(a.im - b.imag)
+
+        if re_diff > 1e-8 or im_diff > 1e-8:
+            complex_fail += 1
+
+    return 'Number of times right integer division resulted in a difference: {} \n\
+Number of times right float division resulted in a difference: {} \n\
+Number of times right complex division resulted in a difference: {}'\
+.format(int_fail, float_fail, complex_fail)
+
 if __name__ == '__main__':
-    #construct()
-    #string_return()
-    #parts()
-    print(add_check(), '\n')
-    print(radd_check(), '\n')
-    print(sub_check(), '\n')
-    print(rsub_check(), '\n')
-    print(mul_check(), '\n')
-    print(rmul_check(), '\n')
+    for i in range(1):
+        #construct()
+        #string_return()
+        #parts()
+        print(add_check(), '\n')
+        print(radd_check(), '\n')
+        print(sub_check(), '\n')
+        print(rsub_check(), '\n')
+        print(mul_check(), '\n')
+        print(rmul_check(), '\n')
+        print(tdiv_check(), '\n')
+        print(rtdiv_check(), '\n')
+
 
