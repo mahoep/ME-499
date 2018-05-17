@@ -610,9 +610,33 @@ def sqrt_check():
 
 
 
-    return 'Number of times square roof of an integer resulted in a difference: {} \n\
+    return 'Number of times square root of an integer resulted in a difference: {} \n\
 Number of times square root of a float resulted in a difference: {} \n\
 Number of times square root of a complex resulted in a difference: {}'.format(int_fail, float_fail, complex_fail)
+
+def pow_check():
+    tests = 100
+    r = 15
+    fail = 0
+
+    print('### Power Checks ({} tests) ###'.format(tests))
+
+    for i in range(tests):
+        re = random.randint(-r, r)
+        im = random.randint(-r, r)
+        num = random.randint(0, 5)
+
+        a = pow(Complex(re, im), num)
+        b = pow(complex(re, im), num)
+
+        re_diff = abs(a.re - b.real)
+        im_diff = abs(a.im - b.imag)
+
+        if re_diff > 1e-8 or im_diff > 1e-8:
+            fail += 1
+            print(a,b,num)
+
+    return 'Number of times the power of a complex number resulted in a difference: {}'.format(fail)
 
 
 if __name__ == '__main__':
@@ -631,6 +655,7 @@ if __name__ == '__main__':
         # print(neg_check(), '\n')
         # print(conj_check(), '\n')
         print(sqrt_check(), '\n')
+        print(pow_check(), '\n')
 
 
 

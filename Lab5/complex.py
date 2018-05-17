@@ -148,3 +148,7 @@ if __name__ == '__main__':
     # c = Complex(1.23, 3.45)
     # print(sqrt(a), sqrt(c))
     print(sqrt(-25))
+
+    a = pow(Complex(3,3),5)
+    b = pow(complex(3,3),5)
+    print(a.re-b.real)
