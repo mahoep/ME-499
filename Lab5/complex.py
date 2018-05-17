@@ -116,32 +116,35 @@ class Complex:
 def sqrt(num):
 
     if isinstance(num, int) or isinstance(num, float):
-        if num > 0:
-            return num ** (1 / 2)
+        if num >= 0:
+            return num ** (1/2)
         else:
             imaginary_ans = abs(num) ** (1/2)
             return Complex(0, imaginary_ans)
+            # return imaginary_ans
 
     elif isinstance(num, Complex):
         re = num.re
         im = num.im
 
-        real_ans = ((re + (re**2 + im**2)**(1/2)) /2) ** (1/2)
+        real_ans = (1/2) * 2**(1/2) * abs( ((re**2 + im**2)**(1/2) + re)**(1/2))
         if im < 0:
             sign = -1
         elif im == 0:
             sign = 0
         else:
             sign = 1
-        imaginary_ans = sign * ((-re + (re**2 + im**2)**(1/2))/2) ** (1/2)
+        imaginary_ans = (1/2) * 2**(1/2)*abs(sign*(((re**2 + im**2)**(1/2)) - re)**(1/2))
+
+        return Complex(real_ans, imaginary_ans)
 
     else:
         raise TypeError('Input must be a int, float, or complex')
 
-    return Complex(real_ans, imaginary_ans)
+
 
 if __name__ == '__main__':
-    a = 1.23
-    c = Complex(1.23, 3.45)
-    print(sqrt(a), sqrt(c))
+    # a = 1.23
+    # c = Complex(1.23, 3.45)
+    # print(sqrt(a), sqrt(c))
     print(sqrt(-25))

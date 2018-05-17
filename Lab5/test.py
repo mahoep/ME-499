@@ -6,6 +6,7 @@ import numpy as np
 from complex import Complex, sqrt
 from roots import *
 import random
+from cmath import sqrt as mathsqrt
 
 def construct():
     try:
@@ -510,18 +511,109 @@ Number of times right float division resulted in a difference: {} \n\
 Number of times right complex division resulted in a difference: {}'\
 .format(int_fail, float_fail, complex_fail)
 
+def neg_check():
+    tests = 1000
+    r = 100
+    complex_fail = 0
+    print('### Negation Check ({} tests) ###'.format(tests))
+
+    for i in range(tests):
+        re = random.randint(-r, r)
+        im = random.randint(-r, r)
+
+        a = -Complex(re, im)
+        b = -complex(re, im)
+
+        re_diff = abs(a.re - b.real)
+        im_diff = abs(a.im - b.imag)
+
+        if re_diff > 1e-8 or im_diff > 1e-8:
+            complex_fail += 1
+
+    return 'Number of times negation resulted in a difference: {}'.format(complex_fail)
+
+def conj_check():
+    tests = 1000
+    r = 100
+    complex_fail = 0
+    print('### Conjugate Check ({} tests) ###'.format(tests))
+
+    for i in range(tests):
+        re = random.randint(-r, r)
+        im = random.randint(-r, r)
+
+        a = ~Complex(re, im)
+        b = complex(re, im).conjugate()
+
+        re_diff = abs(a.re - b.real)
+        im_diff = abs(a.im - b.imag)
+
+        if re_diff > 1e-8 or im_diff > 1e-8:
+            complex_fail += 1
+
+    return 'Number of times inversion resulted in a difference: {}'.format(complex_fail)
+
+def sqrt_check():
+    tests = 100
+    r = 100
+    int_fail = 0
+    float_fail = 0
+    print('### Square Root Checks ({} tests) ###'.format(tests))
+
+    for i in range(tests):
+        num = random.randint(-r, r)
+        a = sqrt(num)
+        b = mathsqrt(num)
+        # print(num, a, b)
+        if isinstance(a, Complex):
+            re_diff = abs(a.re - b.real)
+            im_diff = abs(a.im - b.imag)
+
+            if re_diff > 1e-8 or im_diff > 1e-8:
+                int_fail += 1
+        else:
+            diff = abs(a-b)
+            if diff > 1e-8:
+                int_fail += 1
+
+
+    for i in range(tests):
+        num = random.randint(-r, r) + random.random()
+        a = sqrt(num)
+        b = mathsqrt(num)
+        # print(num, a, b)
+        if isinstance(a, Complex):
+            re_diff = abs(a.re - b.real)
+            im_diff = abs(a.im - b.imag)
+
+            if re_diff > 1e-8 or im_diff > 1e-8:
+                float_fail += 1
+        else:
+            diff = abs(a - b)
+            if diff > 1e-8:
+                float_fail += 1
+
+
+    return 'Number of times square roof of an integer resulted in a difference: {} \n\
+Number of times square root of a flloat resulted in a difference: {}'.format(int_fail, float_fail)
+
+
 if __name__ == '__main__':
     for i in range(1):
         #construct()
         #string_return()
         #parts()
-        print(add_check(), '\n')
-        print(radd_check(), '\n')
-        print(sub_check(), '\n')
-        print(rsub_check(), '\n')
-        print(mul_check(), '\n')
-        print(rmul_check(), '\n')
-        print(tdiv_check(), '\n')
-        print(rtdiv_check(), '\n')
+        # print(add_check(), '\n')
+        # print(radd_check(), '\n')
+        # print(sub_check(), '\n')
+        # print(rsub_check(), '\n')
+        # print(mul_check(), '\n')
+        # print(rmul_check(), '\n')
+        # print(tdiv_check(), '\n')
+        # print(rtdiv_check(), '\n')
+        # print(neg_check(), '\n')
+        # print(conj_check(), '\n')
+        print(sqrt_check(), '\n')
+
 
 
