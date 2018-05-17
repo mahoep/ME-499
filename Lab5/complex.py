@@ -3,6 +3,7 @@
     @author Matthew Hoeper
 '''
 
+import math
 
 class Complex:
     def __init__(self, re=0, im=0):
@@ -96,6 +97,15 @@ class Complex:
         im = self.im * -1
 
         return Complex(re, im)
+
+    def __pow__(self, power):
+        r = sqrt(self.re **2 + self.im**2)
+        theta = math.atan2(self.im, self.re)
+        real = r ** power * math.cos(power * theta)
+        imaginary = r ** power * math.sin(power * theta)
+
+        return Complex(real, imaginary)
+
 
 
 def sqrt(num):
