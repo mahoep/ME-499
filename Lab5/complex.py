@@ -127,14 +127,14 @@ def sqrt(num):
         re = num.re
         im = num.im
 
-        real_ans = (1/2) * 2**(1/2) * abs( ((re**2 + im**2)**(1/2) + re)**(1/2))
+        real_ans = (1/sqrt(2)) * sqrt(sqrt(re**2 + im**2) + re)
         if im < 0:
             sign = -1
         elif im == 0:
             sign = 0
         else:
             sign = 1
-        imaginary_ans = (1/2) * 2**(1/2)*abs(sign*(((re**2 + im**2)**(1/2)) - re)**(1/2))
+        imaginary_ans = (sign/sqrt(2)) * sqrt(sqrt(re**2 + im**2) - re)
 
         return Complex(real_ans, imaginary_ans)
 

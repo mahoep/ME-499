@@ -558,6 +558,7 @@ def sqrt_check():
     r = 100
     int_fail = 0
     float_fail = 0
+    complex_fail = 0
     print('### Square Root Checks ({} tests) ###'.format(tests))
 
     for i in range(tests):
@@ -593,9 +594,25 @@ def sqrt_check():
             if diff > 1e-8:
                 float_fail += 1
 
+    for i in range(tests):
+        re = random.randint(-r, r)
+        im = random.randint(-r, r)
+        a = sqrt(Complex(re, im))
+        b = mathsqrt(complex(re, im))
+
+        re_diff = abs(a.re - b.real)
+        im_diff = abs(a.im - b.imag)
+
+        if re_diff > 1e-8 or im_diff > 1e-8:
+            complex_fail += 1
+
+
+
+
 
     return 'Number of times square roof of an integer resulted in a difference: {} \n\
-Number of times square root of a flloat resulted in a difference: {}'.format(int_fail, float_fail)
+Number of times square root of a float resulted in a difference: {} \n\
+Number of times square root of a complex resulted in a difference: {}'.format(int_fail, float_fail, complex_fail)
 
 
 if __name__ == '__main__':
