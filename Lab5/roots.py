@@ -33,11 +33,9 @@ def evaluate(coeff, x):
     power = 0
     ans = 0
     for i in reversed(coeff):
-        ans = i*x ** power + ans
+        ans = i * (x**power) + ans
         power += 1
     return ans
-
-
 
 
 if __name__ == '__main__':

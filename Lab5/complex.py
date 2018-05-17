@@ -56,7 +56,7 @@ class Complex:
             im = other.im - self.im
         except:
             re = other - self.re
-            im = self.im
+            im = -self.im
 
         return Complex(re, im)
 
@@ -99,13 +99,12 @@ class Complex:
         return Complex(re, im)
 
     def __pow__(self, power):
-        r = sqrt(self.re **2 + self.im**2)
+        r = sqrt(self.re**2 + self.im**2)
         theta = math.atan2(self.im, self.re)
         real = r ** power * math.cos(power * theta)
         imaginary = r ** power * math.sin(power * theta)
 
         return Complex(real, imaginary)
-
 
 
 def sqrt(num):
