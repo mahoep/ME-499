@@ -554,7 +554,7 @@ def conj_check():
     return 'Number of times inversion resulted in a difference: {}'.format(complex_fail)
 
 def sqrt_check():
-    tests = 100
+    tests = 1000
     r = 100
     int_fail = 0
     float_fail = 0
@@ -597,6 +597,7 @@ def sqrt_check():
     for i in range(tests):
         re = random.randint(-r, r)
         im = random.randint(-r, r)
+        #print(re,im)
         a = sqrt(Complex(re, im))
         b = mathsqrt(complex(re, im))
 
@@ -605,8 +606,6 @@ def sqrt_check():
 
         if re_diff > 1e-8 or im_diff > 1e-8:
             complex_fail += 1
-
-
 
 
 
@@ -644,16 +643,16 @@ if __name__ == '__main__':
         #construct()
         #string_return()
         #parts()
-        # print(add_check(), '\n')
-        # print(radd_check(), '\n')
-        # print(sub_check(), '\n')
-        # print(rsub_check(), '\n')
-        # print(mul_check(), '\n')
-        # print(rmul_check(), '\n')
-        # print(tdiv_check(), '\n')
-        # print(rtdiv_check(), '\n')
-        # print(neg_check(), '\n')
-        # print(conj_check(), '\n')
+        print(add_check(), '\n')
+        print(radd_check(), '\n')
+        print(sub_check(), '\n')
+        print(rsub_check(), '\n')
+        print(mul_check(), '\n')
+        print(rmul_check(), '\n')
+        print(tdiv_check(), '\n')
+        print(rtdiv_check(), '\n')
+        print(neg_check(), '\n')
+        print(conj_check(), '\n')
         print(sqrt_check(), '\n')
         print(pow_check(), '\n')
 

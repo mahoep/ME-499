@@ -123,18 +123,43 @@ def sqrt(num):
             return Complex(0, imaginary_ans)
             # return imaginary_ans
 
-    elif isinstance(num, Complex):
+    elif isinstance(num, Complex) and num.im == 0 and num.re >= 0:
+        try:
+            return Complex(sqrt(abs(num.re)), num.im)
+        except:
+            return num
+
+    elif isinstance(num, Complex) and num.re < 0 and num.im == 0:
+        return Complex(0, sqrt(abs(num.re)))
+
+    elif isinstance(num, Complex) and num.re == 0:
         re = num.re
         im = num.im
 
-        real_ans = (1/sqrt(2)) * sqrt(sqrt(re**2 + im**2) + re)
+        real_ans = (1 / sqrt(2)) * abs(sqrt(sqrt(re ** 2 + im ** 2) + re))
         if im < 0:
             sign = -1
         elif im == 0:
             sign = 0
         else:
             sign = 1
-        imaginary_ans = (sign/sqrt(2)) * sqrt(sqrt(re**2 + im**2) - re)
+        imaginary_ans = (sign / sqrt(2)) * abs(sqrt(sqrt(re ** 2 + im ** 2) - re))
+
+        return Complex(real_ans, imaginary_ans)
+
+
+    elif isinstance(num, Complex) and num.im != 0 and num.re != 0:
+        re = num.re
+        im = num.im
+
+        real_ans = (1/sqrt(2)) * abs(sqrt(sqrt(re**2 + im**2) + re))
+        if im < 0:
+            sign = -1
+        elif im == 0:
+            sign = 0
+        else:
+            sign = 1
+        imaginary_ans = (sign/sqrt(2)) * abs(sqrt(sqrt(re**2 + im**2) - re))
 
         return Complex(real_ans, imaginary_ans)
 
@@ -144,11 +169,10 @@ def sqrt(num):
 
 
 if __name__ == '__main__':
-    # a = 1.23
-    # c = Complex(1.23, 3.45)
-    # print(sqrt(a), sqrt(c))
-    print(sqrt(-25))
+    a = Complex(1, 2)
+    print (-a,'(-1 - 2i)')
+    print (~a,'(1 - 2i)')
+    a = 1.23
+    c = Complex(1.23, 3.45)
+    print(sqrt(a), sqrt(c))
 
-    a = pow(Complex(3,3),5)
-    b = pow(complex(3,3),5)
-    print(a.re-b.real)

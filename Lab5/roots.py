@@ -16,8 +16,8 @@ def roots(coeff):
     b = coeff[1]
     c = coeff[2]
 
-    x1 = -b/(2*a) + sqrt(b**2 - 4*a*c)
-    x2 = -b/(2*a) - (sqrt(b**2 - 4*a*c))/(2*a)
+    x1 = -b/(2*a) + sqrt(b**2 - 4*a*c)/(2*a)
+    x2 = -b/(2*a) - sqrt(b**2 - 4*a*c)/(2*a)
 
     roots = (x1, x2)
 
@@ -39,10 +39,9 @@ def evaluate(coeff, x):
 
 
 if __name__ == '__main__':
-    a = 3
-    b = 4
-    c = 2
     print(roots([1, 4, 4]))
+    print(roots([2, -11, 5]))
+    print(roots([1, 1, 2]))
 
     print(evaluate([1, 2, 3], 2))  # This returns the value of x^2 + 2x + 3, for x = 2
     print(evaluate([1, 2, 3], Complex(1, 2)))  # This returns the value of x^2 + 2x + 3, for x = (1 + 2i)
