@@ -5,7 +5,7 @@
 
 
 import requests
-from bs4 import BeautifulSoup
+# from bs4 import BeautifulSoup
 class Course:
 
     def __init__(self, url):
@@ -67,23 +67,37 @@ class Course:
             self.prof[i] = self.prof[i][0:idx + 1]
 
         for i in data:
-            if '<td align="right" valign="top" nowrap="nowrap"><font size="2">' in i:
-                print(i)
+            self.days = []
+            self.time = []
+            self.dates = []
+            for i in data:
+                if '<BR />' in i.strip(' '):
+                    line = i.replace('<', ' ').replace('>', ' ').strip(' ').split(' ')
+                    self.days.append(line[0])
+                    self.time.append(line[1])
+                    self.dates.append(line[-1].replace('\r', ''))
+                    # print(line)
 
-        return [self.depart, self.courseNum, self.descr, self.credit, self.term, self.CRN, self.section, self.prof]
+        self.room = []
+        for i in range(len(data)):
+            if '</font></td><td align="left" nowrap="nowrap"><font size="2">' in data[i]:
+                self.room.append(data[i + 2].strip(' ').replace('\r', ''))
+
+        return [self.depart, self.courseNum, self.descr, self.credit, self.term, self.CRN, self.section, self.prof, self.days, self.time, self.room]
 
 
 # def scrape_course(depart, courseNum, term):
 if __name__ == '__main__':
-    url = 'http://catalog.oregonstate.edu/CourseDetail.aspx?subjectcode=ME&coursenumber=451'
+    url = 'http://catalog.oregonstate.edu/CourseDetail.aspx?subjectcode=ME&coursenumber=430'
 
 
-    # c = Course(url)
-    # print(c.fetch_info())
-    response = requests.get(url)
-    data = response.text.split('\n')
-    for i in data:
-        if '<BR />' in i.strip(' '):
-            line = i.replace('<', ' ').replace('>', ' ')
-            print(line)
+    c = Course(url)
+    print(c.fetch_info())
+    # response = requests.get(url)
+    # data = response.text.split('\n')
+    # room = []
+    # for i in range(len(data)):
+    #     if '</font></td><td align="left" nowrap="nowrap"><font size="2">' in data[i]:
+    #         room.append(data[i+2].strip(' ').replace('\r', ''))
+    # print(room)
 
