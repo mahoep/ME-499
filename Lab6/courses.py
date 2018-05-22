@@ -15,45 +15,46 @@ class Course:
             raise TypeError('URL must be a str')
         self.url = url
 
-    def fetch(self):
-        response = requests.get(self.url)
-        start = '<h3>'
-        end = '</h3>'
-        start_idx = response.text.find(start)
-        end_idx = response.text.find(end)
-        h3 = response.text[start_idx:end_idx]
-
-        header_start = '\n'
-        info = h3[h3.find(header_start, 10)::].split()
-
-        depart = info[0]
-        courseNum = info[1].strip('.')
-        descr = " ".join(str(x) for x in info[2:-1])
-        credit = info[-1].strip('()').strip('.').strip(')')
-        self.header = [depart, courseNum, descr]
-
-    def fetch_bs4(self):
-        response = requests.get(self.url)
-        text = response.text
-        soup = BeautifulSoup(text, 'html.parser')
-        h3 = str(soup.h3).split('\n')
-
-        catalogNum = h3[2].strip(' ').replace('.', '')
-        depart = catalogNum.split(' ')[0]
-        courseNum = catalogNum.split(' ')[1]
-        descr = h3[3].strip(' ')
-        credit = h3[4].strip(' ').replace('.', '').lstrip('(').replace(')', '')
-        self.header = [depart, courseNum, descr]
-
-
     def __str__(self):
         Course.fetch(self)
         return '{} {}: {}'.format(self.header[0], self.header[1], self.header[2])
 
 
-    def prof(self):
+
+    def fetch_info(self):
         response = requests.get(url)
         data = response.text.split('\n')
+        courseInfo = []
+        count = 0
+        for i in data:
+            count += 1
+            if '<img alt="Course" src="images/icon/courselg.gif" border="0" style="font-weight: bold" />' in i:
+                for j in range(0, 3):
+                    courseInfo.append(data[count + j])
+
+        self.depart = courseInfo[0].strip(' ').split(' ')[0]
+        self.courseNum = courseInfo[0].strip(' ').split(' ')[1].replace('.', '').strip()
+        self.descr = courseInfo[1].strip(' ').strip()
+        self.credit = courseInfo[2].strip(' ').replace('.', '').strip()
+
+        self.term = []
+        self.CRN = []
+        self.section = []
+        for i in data:
+            if '<td align="right"><font size="2">' in i:
+                line = i.split('<')
+                term_raw = line[2]
+                idx = term_raw.find('>')
+                self.term.append(term_raw[idx + 1::])
+
+                CRN_raw = line[6]
+                idx = CRN_raw.find('>')
+                self.CRN.append(CRN_raw[idx + 1::])
+
+                section_raw = line[10]
+                idx = section_raw.find('>')
+                self.section.append(section_raw[idx + 1::])
+
         self.prof = []
         for i in data:
             if '</font></td><td nowrap="nowrap"><font size="2">' in i:
@@ -64,35 +65,24 @@ class Course:
         for i in range(len(self.prof)):
             idx = self.prof[i].find('.')
             self.prof[i] = self.prof[i][0:idx + 1]
-        return self.prof
 
-    def info(self):
-        response = requests.get(url)
-        data = response.text.split('\n')
-        term = []
-        CRN = []
-        section = []
         for i in data:
-            if '<td align="right"><font size="2">' in i:
-                line = i.split('<')
-                term_raw = line[2]
-                idx = term_raw.find('>')
-                term.append(term_raw[idx + 1::])
+            if '<td align="right" valign="top" nowrap="nowrap"><font size="2">' in i:
+                print(i)
 
-                CRN_raw = line[6]
-                idx = CRN_raw.find('>')
-                CRN.append(CRN_raw[idx + 1::])
+        return [self.depart, self.courseNum, self.descr, self.credit, self.term, self.CRN, self.section, self.prof]
 
-                section_raw = line[10]
-                idx = section_raw.find('>')
-                section.append(section_raw[idx + 1::])
-        self.info = [term, CRN, section]
-        return self.info
 
 # def scrape_course(depart, courseNum, term):
 if __name__ == '__main__':
-    url = 'http://catalog.oregonstate.edu/CourseDetail.aspx?subjectcode=ME&coursenumber=430'
+    url = 'http://catalog.oregonstate.edu/CourseDetail.aspx?subjectcode=ME&coursenumber=451'
 
 
-    c = Course(url)
-    print(c.info())
+    # c = Course(url)
+    # print(c.fetch_info())
+    response = requests.get(url)
+    data = response.text.split('\n')
+    for i in data:
+        if '                        ' in i and '<BR />' in i.strip(' '):
+            print(i)
+
