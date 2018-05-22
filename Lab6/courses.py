@@ -83,6 +83,7 @@ if __name__ == '__main__':
     response = requests.get(url)
     data = response.text.split('\n')
     for i in data:
-        if '                        ' in i and '<BR />' in i.strip(' '):
-            print(i)
+        if '<BR />' in i.strip(' '):
+            line = i.replace('<', ' ').replace('>', ' ')
+            print(line)
 
