@@ -16,13 +16,12 @@ class Course:
         self.course_data = course_data
 
     def __str__(self):
-        Course.fetch(self)
-        return '{} {}: {}'.format(self.header[0], self.header[1], self.header[2])
+        return '{} {}: {}'.format(self.course_data[0], self.course_data[1], self.course_data[2])
 
 
 def fetch_info(url, term_id='all'):
     '''
-    
+
     :param url: URL to OSU course catalog of specific class
     :param term_id: defines which term the function will return, default is all that are listed
         no matter the term_id, value all will be fetched
@@ -98,10 +97,12 @@ def fetch_info(url, term_id='all'):
         if '</font></td><td align="left" nowrap="nowrap"><font size="2">' in data[i]:
             room.append(data[i + 2].strip(' ').replace('\r', ''))
 
-    return [depart, courseNum, descr, credit, term, CRN, section, prof, days, time, dates, room, campus]
+    course_data = [depart, courseNum, descr, credit, term, CRN, section, prof, days, time, dates, room, campus]
+
+    return Course(course_data)
 
 if __name__ == '__main__':
     url = 'http://catalog.oregonstate.edu/CourseDetail.aspx?subjectcode=ME&coursenumber=312'
 
-
-print(fetch_info(url))
+    c = fetch_info(url)
+    print(fetch_info(url))
