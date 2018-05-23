@@ -20,7 +20,14 @@ class Course:
         return '{} {}: {}'.format(self.header[0], self.header[1], self.header[2])
 
 
-def fetch_info(url):
+def fetch_info(url, term_id='all'):
+    '''
+    
+    :param url: URL to OSU course catalog of specific class
+    :param term_id: defines which term the function will return, default is all that are listed
+        no matter the term_id, value all will be fetched
+    :return: Information regarding course on OSU website
+    '''
     response = requests.get(url)
     data = response.text.split('\n')
     courseInfo = []
