@@ -75,27 +75,26 @@ def fetch_info(url):
     prof = [x for x in prof if x]
 
 
+    days = []
+    time = []
+    dates = []
     for i in data:
-        days = []
-        time = []
-        dates = []
-        for i in data:
-            if '<BR />' in i.strip(' '):
-                line = i.replace('<', ' ').replace('>', ' ').strip(' ').split(' ')
-                days.append(line[0])
-                time.append(line[1])
-                dates.append(line[-1].replace('\r', ''))
-                # print(line)
+        if '<BR />' in i.strip(' '):
+            line = i.replace('<', ' ').replace('>', ' ').strip(' ').split(' ')
+            days.append(line[0])
+            time.append(line[1])
+            dates.append(line[-1].replace('\r', ''))
+            # print(line)
 
     room = []
     for i in range(len(data)):
         if '</font></td><td align="left" nowrap="nowrap"><font size="2">' in data[i]:
             room.append(data[i + 2].strip(' ').replace('\r', ''))
 
-    return [depart, courseNum, descr, credit, term, CRN, section, prof, days, time, room, campus]
+    return [depart, courseNum, descr, credit, term, CRN, section, prof, days, time, dates, room, campus]
 
 if __name__ == '__main__':
     url = 'http://catalog.oregonstate.edu/CourseDetail.aspx?subjectcode=ME&coursenumber=312'
 
 
-fetch_info(url)
+print(fetch_info(url))
