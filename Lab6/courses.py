@@ -8,12 +8,12 @@ import requests
 # from bs4 import BeautifulSoup
 class Course:
 
-    def __init__(self, url):
-        if isinstance(url, str):
+    def __init__(self, course_data):
+        if isinstance(course_data, list):
             pass
         else:
-            raise TypeError('URL must be a str')
-        self.url = url
+            raise TypeError('Course Data must be a list')
+        self.course_data = course_data
 
     def __str__(self):
         Course.fetch(self)
