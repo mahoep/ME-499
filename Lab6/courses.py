@@ -22,7 +22,7 @@ class Course:
         return self.course_data[7]
 
 
-def fetch_info(url, term_id='all'):
+def fetch_info(url, term_id='all', inst=0):
     '''
     :param url: URL to OSU course catalog of specific class
     :param term_id: defines which term the function will return, default is all that are listed
@@ -43,6 +43,20 @@ def fetch_info(url, term_id='all'):
     courseNum = courseInfo[0].strip(' ').split(' ')[1].replace('.', '').strip()
     descr = courseInfo[1].strip(' ').strip()
     credit = courseInfo[2].strip(' ').replace('.', '').strip()
+
+    course_type = []
+    for i in range(len(data)):
+        if '</font></td><td valign="top"><font size="2">' in data[i]:
+            if 'Lecture' in data[i]:
+                course_type.append('Lecture')
+            elif 'Laboratory' in data[i]:
+                course_type.append('Laboratory')
+            elif 'Online' in data[i]:
+                course_type.append('Online')
+            elif 'Hybrid' in data[i]:
+                course_type.append('Hybrid')
+            else:
+                course_type.append('Other')
 
     term = []
     CRN = []
@@ -66,16 +80,18 @@ def fetch_info(url, term_id='all'):
     campus = []
     for i in data:
         if '</font></td><td nowrap="nowrap"><font size="2">' in i:
+
             a = i.find('</font></td><td nowrap="nowrap"><font size="2">')
             b = i[a + 47:a + 75]
-
+            print(b)
             if 'Corv' not in b or 'Casc' not in b or 'Ecampus-Distance Education-LD' not in b:
                 prof.append(i[a + 47:a + 75])
+
             if 'Corv' in b or 'Casc' in b or 'Ecampus-Distance Education-LD' in b:
                 campus.append(i[a + 47:a + 75])
     for i in range(len(prof)):
-        idx = prof[i].find('.')
-        prof[i] = prof[i][0:idx + 1]
+        idx = prof[i].find('</font>')
+        prof[i] = prof[i][0:idx]
 
     for i in range(len(campus)):
         idx = campus[i].find('<')
@@ -98,6 +114,7 @@ def fetch_info(url, term_id='all'):
     for i in range(len(data)):
         if '</font></td><td align="left" nowrap="nowrap"><font size="2">' in data[i]:
             room.append(data[i + 2].strip(' ').replace('\r', ''))
+
     course_type = []
     for i in range(len(data)):
         if '</font></td><td valign="top"><font size="2">' in data[i]:
@@ -109,17 +126,37 @@ def fetch_info(url, term_id='all'):
                 course_type.append('Online')
             elif 'Hybrid' in data[i]:
                 course_type.append('Hybrid')
-    print(course_type)
+            else:
+                course_type.append('Other')
+    # print(course_type)
 
+    for i in range(len(course_type)):
+        if course_type[i] != 'Lecture':
+            pass
+            # print(i)
+            # del term[i]
+            # del CRN[i]
+            # del section[i]
+            # del prof[i]
+            # del days[i]
+            # del time[i]
+            # del dates[i]
+            # del room[i]
+            # del campus[i]
+            # del course_type[i]
 
     course_data = [depart, courseNum, descr, credit, term, CRN, section, prof, days, time, dates, room, campus, course_type]
-
-    return Course(course_data)
+    if inst == 0:
+        return course_data
+    else:
+        return Course(course_data)
 
 if __name__ == '__main__':
     url = 'http://catalog.oregonstate.edu/CourseDetail.aspx?subjectcode=ME&coursenumber=451'
 
     c = fetch_info(url)
     print(c)
-    b = c.prof()
-    print(b)
+
+
+
+
