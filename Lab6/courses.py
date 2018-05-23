@@ -18,10 +18,12 @@ class Course:
     def __str__(self):
         return '{} {}: {}'.format(self.course_data[0], self.course_data[1], self.course_data[2])
 
+    def prof(self, term=0):
+        return self.course_data[7]
+
 
 def fetch_info(url, term_id='all'):
     '''
-
     :param url: URL to OSU course catalog of specific class
     :param term_id: defines which term the function will return, default is all that are listed
         no matter the term_id, value all will be fetched
@@ -96,13 +98,28 @@ def fetch_info(url, term_id='all'):
     for i in range(len(data)):
         if '</font></td><td align="left" nowrap="nowrap"><font size="2">' in data[i]:
             room.append(data[i + 2].strip(' ').replace('\r', ''))
+    course_type = []
+    for i in range(len(data)):
+        if '</font></td><td valign="top"><font size="2">' in data[i]:
+            if 'Lecture' in data[i]:
+                course_type.append('Lecture')
+            elif 'Laboratory' in data[i]:
+                course_type.append('Laboratory')
+            elif 'Online' in data[i]:
+                course_type.append('Online')
+            elif 'Hybrid' in data[i]:
+                course_type.append('Hybrid')
+    print(course_type)
 
-    course_data = [depart, courseNum, descr, credit, term, CRN, section, prof, days, time, dates, room, campus]
+
+    course_data = [depart, courseNum, descr, credit, term, CRN, section, prof, days, time, dates, room, campus, course_type]
 
     return Course(course_data)
 
 if __name__ == '__main__':
-    url = 'http://catalog.oregonstate.edu/CourseDetail.aspx?subjectcode=ME&coursenumber=312'
+    url = 'http://catalog.oregonstate.edu/CourseDetail.aspx?subjectcode=ME&coursenumber=451'
 
     c = fetch_info(url)
-    print(fetch_info(url))
+    print(c)
+    b = c.prof()
+    print(b)
