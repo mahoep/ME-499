@@ -20,84 +20,82 @@ class Course:
         return '{} {}: {}'.format(self.header[0], self.header[1], self.header[2])
 
 
+def fetch_info(url):
+    response = requests.get(url)
+    data = response.text.split('\n')
+    courseInfo = []
+    count = 0
+    for i in data:
+        count += 1
+        if '<img alt="Course" src="images/icon/courselg.gif" border="0" style="font-weight: bold" />' in i:
+            for j in range(0, 3):
+                courseInfo.append(data[count + j])
 
-    def fetch_info(self):
-        response = requests.get(url)
-        data = response.text.split('\n')
-        courseInfo = []
-        count = 0
+    depart = courseInfo[0].strip(' ').split(' ')[0]
+    courseNum = courseInfo[0].strip(' ').split(' ')[1].replace('.', '').strip()
+    descr = courseInfo[1].strip(' ').strip()
+    credit = courseInfo[2].strip(' ').replace('.', '').strip()
+
+    term = []
+    CRN = []
+    section = []
+    for i in data:
+        if '<td align="right"><font size="2">' in i:
+            line = i.split('<')
+            term_raw = line[2]
+            idx = term_raw.find('>')
+            term.append(term_raw[idx + 1::])
+
+            CRN_raw = line[6]
+            idx = CRN_raw.find('>')
+            CRN.append(CRN_raw[idx + 1::])
+
+            section_raw = line[10]
+            idx = section_raw.find('>')
+            section.append(section_raw[idx + 1::])
+
+    prof = []
+    campus = []
+    for i in data:
+        if '</font></td><td nowrap="nowrap"><font size="2">' in i:
+            a = i.find('</font></td><td nowrap="nowrap"><font size="2">')
+            b = i[a + 47:a + 75]
+
+            if 'Corv' not in b or 'Casc' not in b or 'Ecampus-Distance Education-LD' not in b:
+                prof.append(i[a + 47:a + 75])
+            if 'Corv' in b or 'Casc' in b or 'Ecampus-Distance Education-LD' in b:
+                campus.append(i[a + 47:a + 75])
+    for i in range(len(prof)):
+        idx = prof[i].find('.')
+        prof[i] = prof[i][0:idx + 1]
+
+    for i in range(len(campus)):
+        idx = campus[i].find('<')
+        campus[i] = campus[i][0:idx]
+    prof = [x for x in prof if x]
+
+
+    for i in data:
+        days = []
+        time = []
+        dates = []
         for i in data:
-            count += 1
-            if '<img alt="Course" src="images/icon/courselg.gif" border="0" style="font-weight: bold" />' in i:
-                for j in range(0, 3):
-                    courseInfo.append(data[count + j])
+            if '<BR />' in i.strip(' '):
+                line = i.replace('<', ' ').replace('>', ' ').strip(' ').split(' ')
+                days.append(line[0])
+                time.append(line[1])
+                dates.append(line[-1].replace('\r', ''))
+                # print(line)
 
-        self.depart = courseInfo[0].strip(' ').split(' ')[0]
-        self.courseNum = courseInfo[0].strip(' ').split(' ')[1].replace('.', '').strip()
-        self.descr = courseInfo[1].strip(' ').strip()
-        self.credit = courseInfo[2].strip(' ').replace('.', '').strip()
+    room = []
+    for i in range(len(data)):
+        if '</font></td><td align="left" nowrap="nowrap"><font size="2">' in data[i]:
+            room.append(data[i + 2].strip(' ').replace('\r', ''))
 
-        self.term = []
-        self.CRN = []
-        self.section = []
-        for i in data:
-            if '<td align="right"><font size="2">' in i:
-                line = i.split('<')
-                term_raw = line[2]
-                idx = term_raw.find('>')
-                self.term.append(term_raw[idx + 1::])
+    return [depart, courseNum, descr, credit, term, CRN, section, prof, days, time, room, campus]
 
-                CRN_raw = line[6]
-                idx = CRN_raw.find('>')
-                self.CRN.append(CRN_raw[idx + 1::])
-
-                section_raw = line[10]
-                idx = section_raw.find('>')
-                self.section.append(section_raw[idx + 1::])
-
-        self.prof = []
-        for i in data:
-            if '</font></td><td nowrap="nowrap"><font size="2">' in i:
-                a = i.find('</font></td><td nowrap="nowrap"><font size="2">')
-                b = i[a + 47:a + 75]
-                if 'Corv' not in b:
-                    self.prof.append(i[a + 47:a + 75])
-        for i in range(len(self.prof)):
-            idx = self.prof[i].find('.')
-            self.prof[i] = self.prof[i][0:idx + 1]
-
-        for i in data:
-            self.days = []
-            self.time = []
-            self.dates = []
-            for i in data:
-                if '<BR />' in i.strip(' '):
-                    line = i.replace('<', ' ').replace('>', ' ').strip(' ').split(' ')
-                    self.days.append(line[0])
-                    self.time.append(line[1])
-                    self.dates.append(line[-1].replace('\r', ''))
-                    # print(line)
-
-        self.room = []
-        for i in range(len(data)):
-            if '</font></td><td align="left" nowrap="nowrap"><font size="2">' in data[i]:
-                self.room.append(data[i + 2].strip(' ').replace('\r', ''))
-
-        return [self.depart, self.courseNum, self.descr, self.credit, self.term, self.CRN, self.section, self.prof, self.days, self.time, self.room]
-
-
-# def scrape_course(depart, courseNum, term):
 if __name__ == '__main__':
-    url = 'http://catalog.oregonstate.edu/CourseDetail.aspx?subjectcode=ME&coursenumber=430'
+    url = 'http://catalog.oregonstate.edu/CourseDetail.aspx?subjectcode=ME&coursenumber=312'
 
 
-    c = Course(url)
-    print(c.fetch_info())
-    # response = requests.get(url)
-    # data = response.text.split('\n')
-    # room = []
-    # for i in range(len(data)):
-    #     if '</font></td><td align="left" nowrap="nowrap"><font size="2">' in data[i]:
-    #         room.append(data[i+2].strip(' ').replace('\r', ''))
-    # print(room)
-
+fetch_info(url)
