@@ -3,11 +3,10 @@
     @author Matthew Hoeper
 '''
 
-
 import requests
-# from bs4 import BeautifulSoup
-class Course:
 
+
+class Course:
     def __init__(self, course_data):
         if isinstance(course_data, list):
             pass
@@ -56,7 +55,13 @@ def fetch_info(subject, courseCode, term_fetch):
     :param term_fetch:
     :return:
     '''
-    url = 'http://catalog.oregonstate.edu/CourseDetail.aspx?subjectcode={}&coursenumber={}'.format(subject, courseCode)
+    if isinstance(courseCode, int):
+        if len(str(courseCode)) == 3:
+            pass
+    else:
+        raise TypeError('Course code must be an integer of length 3')
+
+    url = 'http://catalog.oregonstate.edu/CourseDetail.aspx?subjectcode={}&coursenumber={}'.format(subject.upper(), courseCode)
     response = requests.get(url)
     data = response.text.split('\n')
     courseInfo = []
@@ -106,16 +111,27 @@ def fetch_info(subject, courseCode, term_fetch):
 
     prof = []
     campus = []
-    for i in data:
-        if '</font></td><td nowrap="nowrap"><font size="2">' in i:
+    days = []
+    time = []
+    for i in range(len(data)):
+        if '</font></td><td nowrap="nowrap"><font size="2">' in data[i]:
 
-            a = i.find('</font></td><td nowrap="nowrap"><font size="2">')
-            b = i[a + 47::]
-            if 'Corv' not in b:
-                prof.append(b)
+            a = data[i].find('</font></td><td nowrap="nowrap"><font size="2">')
+            b = data[i][a + 47::]
 
             if 'Corv' in b or 'Casc' in b or 'Ecampus-Distance Education-LD' in b:
                 campus.append(b)
+            else:
+                prof.append(b)
+            if '                        ' in data[i+2]:
+                if 'TBA' in data[i+2]:
+                    days.append(data[i+2].strip(' ').replace('\r',''))
+                    time.append(data[i+2].strip(' ').replace('\r',''))
+                else:
+                    line = data[i+2].replace('<', ' ').replace('>', ' ').strip(' ').split(' ')
+                    days.append(line[0])
+                    time.append(line[1])
+
     for i in range(len(prof)):
         idx = prof[i].find('</font>')
         prof[i] = prof[i][0:idx]
@@ -123,15 +139,6 @@ def fetch_info(subject, courseCode, term_fetch):
     for i in range(len(campus)):
         idx = campus[i].find('<')
         campus[i] = campus[i][0:idx]
-
-    days = []
-    time = []
-    for i in data:
-        if '<BR />' in i.strip(' '):
-            line = i.replace('<', ' ').replace('>', ' ').strip(' ').split(' ')
-            days.append(line[0])
-            time.append(line[1])
-            # print(line)
 
     room = []
     for i in range(len(data)):
@@ -149,21 +156,23 @@ def fetch_info(subject, courseCode, term_fetch):
                 course_type.append('Online')
             elif 'Hybrid' in data[i]:
                 course_type.append('Hybrid')
-            else:
-                course_type.append('Other')
-    # print(len(course_type))
+            elif 'Recitation':
+                course_type.append('Recitation')
+    print(course_type)
 
     for i in range(len(course_type)):
-        if course_type[i] != 'Lecture' or term[i] != term_fetch:
-            term[i] = ''
-            CRN[i] = ''
-            section[i] = ''
-            prof[i] = ''
-            days[i] = ''
-            time[i] = ''
-            room[i] = ''
-            campus[i] = ''
-            course_type[i] = ''
+        if course_type[i] != 'Lecture' or term[i] != term_fetch or course_type[i] != 'Online':
+            print(i ,course_type[i])
+    #         term[i] = ''
+    #         CRN[i] = ''
+    #         section[i] = ''
+    #         prof[i] = ''
+    #         days[i] = ''
+    #         time[i] = ''
+    #         room[i] = ''
+    #         campus[i] = ''
+    #         course_type[i] = ''
+
 
     term = list(filter(None, term))
     CRN = list(filter(None, CRN))
@@ -176,15 +185,22 @@ def fetch_info(subject, courseCode, term_fetch):
     course_type = list(filter(None, course_type))
     course_data = [depart, courseNum, descr, credit, term, CRN, section, prof, days, time, room, campus, course_type]
 
-    return Course(course_data)
+    # return Course(course_data)
 
+    return course_data
 if __name__ == '__main__':
 
-    c = fetch_info('ME', 451, 'F18')
-    print(c)
+    # a = fetch_info('ME', 451, 'F18')
+    # print(a)
+    #
+    # b = fetch_info('ROB', 514, 'F18')
+    # print(b)
+    #
+    # c = fetch_info('ME', 312, 'W19')
+    # print(c)
 
-    c = fetch_info('ROB', 514, 'F18')
-    print(c.room())
+    d = fetch_info('MUS', 102, 'W19')
+    print(d)
 
 
 
