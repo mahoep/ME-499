@@ -18,17 +18,45 @@ class Course:
     def __str__(self):
         return '{} {}: {}'.format(self.course_data[0], self.course_data[1], self.course_data[2])
 
-    def prof(self, term=0):
-        return self.course_data[7]
+    def credit(self):
+        return self.course_data[3]
 
+    def term(self):
+        return self.course_data[4][0]
 
-def fetch_info(url, term_id='all', inst=0):
+    def CRN(self):
+        return self.course_data[5][0]
+
+    def section(self):
+        return self.course_data[6][0]
+
+    def prof(self):
+        return self.course_data[7][0]
+
+    def days(self):
+        return self.course_data[8][0]
+
+    def time(self):
+        return self.course_data[9][0]
+
+    def room(self):
+        return self.course_data[10][0]
+
+    def campus(self):
+        return self.course_data[11][0]
+
+    def course_type(self):
+        return self.course_data[12][0]
+
+def fetch_info(subject, courseCode, term_fetch):
     '''
-    :param url: URL to OSU course catalog of specific class
-    :param term_id: defines which term the function will return, default is all that are listed
-        no matter the term_id, value all will be fetched
-    :return: Information regarding course on OSU website
+
+    :param subject:
+    :param courseCode:
+    :param term_fetch:
+    :return:
     '''
+    url = 'http://catalog.oregonstate.edu/CourseDetail.aspx?subjectcode={}&coursenumber={}'.format(subject, courseCode)
     response = requests.get(url)
     data = response.text.split('\n')
     courseInfo = []
@@ -98,13 +126,11 @@ def fetch_info(url, term_id='all', inst=0):
 
     days = []
     time = []
-    dates = []
     for i in data:
         if '<BR />' in i.strip(' '):
             line = i.replace('<', ' ').replace('>', ' ').strip(' ').split(' ')
             days.append(line[0])
             time.append(line[1])
-            dates.append(line[-1].replace('\r', ''))
             # print(line)
 
     room = []
@@ -128,14 +154,13 @@ def fetch_info(url, term_id='all', inst=0):
     # print(len(course_type))
 
     for i in range(len(course_type)):
-        if course_type[i] != 'Lecture':
+        if course_type[i] != 'Lecture' or term[i] != term_fetch:
             term[i] = ''
             CRN[i] = ''
             section[i] = ''
             prof[i] = ''
             days[i] = ''
             time[i] = ''
-            dates[i] = ''
             room[i] = ''
             campus[i] = ''
             course_type[i] = ''
@@ -146,22 +171,20 @@ def fetch_info(url, term_id='all', inst=0):
     prof = list(filter(None, prof))
     days = list(filter(None, days))
     time = list(filter(None, time))
-    dates = list(filter(None, dates))
     room = list(filter(None, room))
     campus = list(filter(None, campus))
     course_type = list(filter(None, course_type))
-    course_data = [depart, courseNum, descr, credit, term, CRN, section, prof, days, time, dates, room, campus, course_type]
+    course_data = [depart, courseNum, descr, credit, term, CRN, section, prof, days, time, room, campus, course_type]
 
-    if inst == 0:
-        return course_data
-    else:
-        return Course(course_data)
+    return Course(course_data)
 
 if __name__ == '__main__':
-    url = 'http://catalog.oregonstate.edu/CourseDetail.aspx?subjectcode=ME&coursenumber=451'
 
-    c = fetch_info(url)
+    c = fetch_info('ME', 451, 'F18')
     print(c)
+
+    c = fetch_info('ROB', 514, 'F18')
+    print(c.room())
 
 
 
