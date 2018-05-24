@@ -158,20 +158,19 @@ def fetch_info(subject, courseCode, term_fetch):
                 course_type.append('Hybrid')
             elif 'Recitation':
                 course_type.append('Recitation')
-    print(course_type)
+    # print(course_type)
 
     for i in range(len(course_type)):
-        if course_type[i] != 'Lecture' or term[i] != term_fetch or course_type[i] != 'Online':
-            print(i ,course_type[i])
-    #         term[i] = ''
-    #         CRN[i] = ''
-    #         section[i] = ''
-    #         prof[i] = ''
-    #         days[i] = ''
-    #         time[i] = ''
-    #         room[i] = ''
-    #         campus[i] = ''
-    #         course_type[i] = ''
+        if term[i] != term_fetch or course_type[i] != 'Online' and course_type[i] != 'Lecture':
+            term[i] = ''
+            CRN[i] = ''
+            section[i] = ''
+            prof[i] = ''
+            days[i] = ''
+            time[i] = ''
+            room[i] = ''
+            campus[i] = ''
+            course_type[i] = ''
 
 
     term = list(filter(None, term))
@@ -185,22 +184,26 @@ def fetch_info(subject, courseCode, term_fetch):
     course_type = list(filter(None, course_type))
     course_data = [depart, courseNum, descr, credit, term, CRN, section, prof, days, time, room, campus, course_type]
 
-    # return Course(course_data)
+    return Course(course_data)
 
-    return course_data
 if __name__ == '__main__':
 
-    # a = fetch_info('ME', 451, 'F18')
-    # print(a)
-    #
-    # b = fetch_info('ROB', 514, 'F18')
-    # print(b)
-    #
-    # c = fetch_info('ME', 312, 'W19')
-    # print(c)
+    a = fetch_info('ME', 451, 'F18')
+    print(a)
+
+    b = fetch_info('ROB', 514, 'F18')
+    print(b)
+
+    c = fetch_info('ME', 312, 'W19')
+    print(c)
 
     d = fetch_info('MUS', 102, 'W19')
     print(d)
+
+    e = fetch_info('Bi', 315, 'Sp19')
+    print(e)
+
+
 
 
 
