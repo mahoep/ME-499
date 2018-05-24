@@ -21,39 +21,66 @@ class Course:
         return self.course_data[3]
 
     def term(self):
-        return self.course_data[4][0]
+        if len(self.course_data[4]) == 1:
+            return self.course_data[4][0]
+        else:
+            return self.course_data[4]
 
     def CRN(self):
-        return self.course_data[5][0]
+        if len(self.course_data[5]) == 1:
+            return self.course_data[5][0]
+        else:
+            return self.course_data[5]
 
     def section(self):
-        return self.course_data[6][0]
+        if len(self.course_data[6]) == 1:
+            return self.course_data[6][0]
+        else:
+            return self.course_data[6]
 
     def prof(self):
-        return self.course_data[7][0]
+        if len(self.course_data[7]) == 1:
+            return self.course_data[7][0]
+        else:
+            return self.course_data[7]
 
     def days(self):
-        return self.course_data[8][0]
+        if len(self.course_data[8]) == 1:
+            return self.course_data[8][0]
+        else:
+            return self.course_data[8]
 
     def time(self):
-        return self.course_data[9][0]
+        if len(self.course_data[9]) == 1:
+            return self.course_data[9][0]
+        else:
+            return self.course_data[9]
 
     def room(self):
-        return self.course_data[10][0]
+        if len(self.course_data[10]) == 1:
+            return self.course_data[10][0]
+        else:
+            return self.course_data[10]
 
     def campus(self):
-        return self.course_data[11][0]
+        if len(self.course_data[11]) == 1:
+            return self.course_data[11][0]
+        else:
+            return self.course_data[11]
 
     def course_type(self):
-        return self.course_data[12][0]
+        if len(self.course_data[12]) == 1:
+            return self.course_data[12][0]
+        else:
+            return self.course_data[12]
 
 def fetch_info(subject, courseCode, term_fetch):
     '''
 
-    :param subject:
-    :param courseCode:
-    :param term_fetch:
-    :return:
+    :param subject: department or subject is taught in, ME, BI, MTH, etc
+    :param courseCode: course number, 3 digit integer, 101, 254, 312, etc
+    :param term_fetch: what term you want the data for, W19, Su19 ,etc CASE SENSITIVE!!!
+    :return: a list with information pertaining the course and term, can return multiple sections
     '''
     if isinstance(courseCode, int):
         if len(str(courseCode)) == 3:
@@ -189,19 +216,19 @@ def fetch_info(subject, courseCode, term_fetch):
 if __name__ == '__main__':
 
     a = fetch_info('ME', 451, 'F18')
-    print(a)
+    print(a, a.time())
 
     b = fetch_info('ROB', 514, 'F18')
-    print(b)
+    print(b, b.room())
 
     c = fetch_info('ME', 312, 'W19')
-    print(c)
+    print(c, c.days())
 
     d = fetch_info('MUS', 102, 'W19')
-    print(d)
+    print(d, d.prof())
 
-    e = fetch_info('Bi', 315, 'Sp19')
-    print(e)
+    e = fetch_info('Bi', 315, 'Sp18')
+    print(e, e.time())
 
 
 
