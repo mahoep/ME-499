@@ -82,13 +82,12 @@ def fetch_info(url, term_id='all', inst=0):
         if '</font></td><td nowrap="nowrap"><font size="2">' in i:
 
             a = i.find('</font></td><td nowrap="nowrap"><font size="2">')
-            b = i[a + 47:a + 75]
-            print(b)
-            if 'Corv' not in b or 'Casc' not in b or 'Ecampus-Distance Education-LD' not in b:
-                prof.append(i[a + 47:a + 75])
+            b = i[a + 47::]
+            if 'Corv' not in b:
+                prof.append(b)
 
             if 'Corv' in b or 'Casc' in b or 'Ecampus-Distance Education-LD' in b:
-                campus.append(i[a + 47:a + 75])
+                campus.append(b)
     for i in range(len(prof)):
         idx = prof[i].find('</font>')
         prof[i] = prof[i][0:idx]
@@ -96,8 +95,6 @@ def fetch_info(url, term_id='all', inst=0):
     for i in range(len(campus)):
         idx = campus[i].find('<')
         campus[i] = campus[i][0:idx]
-    prof = [x for x in prof if x]
-
 
     days = []
     time = []
@@ -128,24 +125,33 @@ def fetch_info(url, term_id='all', inst=0):
                 course_type.append('Hybrid')
             else:
                 course_type.append('Other')
-    # print(course_type)
+    # print(len(course_type))
 
     for i in range(len(course_type)):
         if course_type[i] != 'Lecture':
-            pass
-            # print(i)
-            # del term[i]
-            # del CRN[i]
-            # del section[i]
-            # del prof[i]
-            # del days[i]
-            # del time[i]
-            # del dates[i]
-            # del room[i]
-            # del campus[i]
-            # del course_type[i]
+            term[i] = ''
+            CRN[i] = ''
+            section[i] = ''
+            prof[i] = ''
+            days[i] = ''
+            time[i] = ''
+            dates[i] = ''
+            room[i] = ''
+            campus[i] = ''
+            course_type[i] = ''
 
+    term = list(filter(None, term))
+    CRN = list(filter(None, CRN))
+    section = list(filter(None, section))
+    prof = list(filter(None, prof))
+    days = list(filter(None, days))
+    time = list(filter(None, time))
+    dates = list(filter(None, dates))
+    room = list(filter(None, room))
+    campus = list(filter(None, campus))
+    course_type = list(filter(None, course_type))
     course_data = [depart, courseNum, descr, credit, term, CRN, section, prof, days, time, dates, room, campus, course_type]
+
     if inst == 0:
         return course_data
     else:
