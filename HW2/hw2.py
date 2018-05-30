@@ -10,90 +10,83 @@ import matplotlib.pyplot as plt
 import scipy.signal as signal
 
 
-# class MUCamera:
+class MUCamera:
 
+    def __init__(self):
+        self.image = webcam.Webcam().grab_image()
+        self.imdata = self.image.getdata()
 
-def image_intensity():
-    mu_live = webcam.Webcam().grab_image()
-    intensity = mu_live.getdata()
-    pxlavg = []
-    for i in list(intensity):
-        pxlavg.append(np.mean(i))
+    def image_intensity(self):
+        pxlavg = []
+        for i in list(self.imdata):
+            pxlavg.append(np.mean(i))
 
-    return np.mean(pxlavg)
+        return np.mean(pxlavg)
 
-def moving_average():
+    def moving_average(self):
+        avg = []
+        lst_time = []
+        while time.time() < 1527612840: # May 29th, @ 8:30 am PST
+                now = time.time()
+                pxlavg = []
 
-    avg = []
-    lst_time = []
-    while time.time() < 1527612840: # May 29th, @ 8:30 am PST
-            now = time.time()
-            mu_live = webcam.Webcam().grab_image()
-            intensity = mu_live.getdata()
-            pxlavg = []
+                for i in list(self.imdata):
+                    pxlavg.append(np.mean(i))
 
-            for i in list(intensity):
-                pxlavg.append(np.mean(i))
+                lst_time.append(now)
+                avg.append(np.mean(pxlavg))
+                time.sleep(1)
 
-            lst_time.append(now)
-            avg.append(np.mean(pxlavg))
-            time.sleep(1)
+        t0 = lst_time[0]
+        lst_time[:] = [x - t0 for x in lst_time]
 
-    t0 = lst_time[0]
-    lst_time[:] = [x - t0 for x in lst_time]
+        return lst_time, avg
 
-    return lst_time, avg
+    def filtered_average_intensity(self):
+        # from https://docs.scipy.org/doc/scipy-1.0.0/reference/generated/scipy.signal.lfilter.html#scipy.signal.lfilter
+        _, avg = self.moving_average()
+        b, a = signal.butter(5, 0.025)
+        zi = signal.lfilter_zi(b, a)
+        z, _ = signal.lfilter(b, a, avg, zi=zi * avg[0])
+        z2, _ = signal.lfilter(b, a, z, zi=zi * z[0])
+        y = signal.filtfilt(b, a, avg)
+        return y
 
-def filter_avg():
-    # from https://docs.scipy.org/doc/scipy-1.0.0/reference/generated/scipy.signal.lfilter.html#scipy.signal.lfilter
-    b, a = signal.butter(5, 0.025)
-    zi = signal.lfilter_zi(b, a)
-    z, _ = signal.lfilter(b, a, avg, zi=zi * avg[0])
-    z2, _ = signal.lfilter(b, a, z, zi=zi * z[0])
-    y = signal.filtfilt(b, a, avg)
-    return y
+    def intensity_plot(self):
+        lst_time, avg = self.moving_average()
+        y = self.filtered_average_intensity()
 
+        plt.plot(lst_time, avg, 'k', lst_time, y, 'r--')
+        plt.xlabel('Minutes (min)')
+        plt.ylabel('Average Intensity')
+        plt.legend(('Noisy Signal', 'Filtered Signal'), loc='best')
+        plt.show()
 
+    def daytime(self, threshold=80):
+        intensity = self.image_intensity()
 
-def intensity_plot():
-    lst_time, avg = moving_average()
-    y = filter_avg()
+        if intensity < threshold:
+            return False
+        else:
+            return True
 
-    plt.plot(lst_time, avg, 'k', lst_time, y, 'r--')
-    plt.xlabel('Minutes (min)')
-    plt.ylabel('Average Intensity')
-    plt.legend(('Noisy Signal', 'Filtered Signal'), loc='best')
-    plt.show()
+    def common_color():
+        image = webcam.Webcam().grab_image()
+        pixels = mu_live.getcolors()
 
+        most_frequent_pixel = pixels[0]
 
-def daytime(threshold=80):
-    intensity = image_intensity()
+        # for count, colour in pixels:
+        #     if count > most_frequent_pixel[0]:
+        #         most_frequent_pixel = (count, colour)
 
-    if intensity < threshold:
-        return False
-    else:
-        return True
-
-def common_color():
-    image = webcam.Webcam().grab_image()
-    pixels = mu_live.getcolors()
-
-    most_frequent_pixel = pixels[0]
-
-    # for count, colour in pixels:
-    #     if count > most_frequent_pixel[0]:
-    #         most_frequent_pixel = (count, colour)
-
-    return most_frequent_pixel
+        return most_frequent_pixel
 
 
 
 if __name__ == '__main__':
-    # print(image_intensity())
-    # moving_average()
-    # print(daytime())
-    # print(common_color())
-    intensity_plot()
+    test = MUCamera()
+    print(test.image_intensity())
 
 
 
