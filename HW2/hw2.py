@@ -26,7 +26,8 @@ class MUCamera:
     def moving_average(self):
         avg = []
         lst_time = []
-        while time.time() < 1527612840: # May 29th, @ 8:30 am PST
+        inital_time = time.time()
+        while time.time() < inital_time+120: # May 29th, @ 8:30 am PST
                 now = time.time()
                 pxlavg = []
 
