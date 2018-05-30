@@ -7,6 +7,7 @@ import webcam, time, csv, os.path
 from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
+import scipy.signal as signal
 
 
 def moving_average():
@@ -43,23 +44,32 @@ def moving_average():
 
     avg = []
     lst_time = []
-    with open(datafile, 'r') as f:
-        for row in csv.reader(f):
+    with open(datafile) as file:
+        for row in csv.reader(file):
             lst_time.append(float(row[0]))
             avg.append(float(row[1]))
 
-    t0 = lst_time[0]
-    lst_time[:] = [x - t0 for x in lst_time]
 
-    plt.plot(lst_time, avg)
-    plt.xlabel('Time (s)')
+
+    t0 = lst_time[0]
+    lst_time[:] = [(x - t0)/60 for x in lst_time]
+
+    b, a = signal.butter(5, 0.025)
+    zi = signal.lfilter_zi(b, a)
+    z, _ = signal.lfilter(b, a, avg, zi=zi * avg[0])
+    z2, _ = signal.lfilter(b, a, z, zi=zi * z[0])
+    y = signal.filtfilt(b, a, avg)
+
+    plt.plot(lst_time, avg, 'k',lst_time, y, 'r--')
+    plt.xlabel('Minutes (min)')
     plt.ylabel('Average Intensity')
+    plt.legend(('Noisy Signal', 'Filtered Signal'), loc='best')
     plt.show()
 
 
 if __name__ == '__main__':
 
-    # moving_average()
+    moving_average()
 
 
 
