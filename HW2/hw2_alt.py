@@ -15,21 +15,24 @@ import math as mth
 
 class MUCamera:
 
-    def __init__(self, motion=0):
-        if motion == 0:
-            self.MU = Webcam()
-            self.img_intensity = []
-            self.img_time = []
-            self.MU.start()
-            self.filtered_average = []
-            self.MU.register_callback(self.average_intensity, 1)
-            self.img = []
-            self.euclidean_dist = None
+    def __init__(self, print_avg=0):
+        self.MU = Webcam()
+        self.img_intensity = []
+        self.img_time = []
+        self.MU.start()
+        self.filtered_average = []
+        self.MU.register_callback(self.average_intensity, 1)
+        self.img = []
+        self.euclidean_dist = None
+        self.print_avg = print_avg
 
     def average_intensity(self, image):
         self.img_intensity.append(np.mean(np.mean(image)))
         self.img_time.append(time.time())
         self.img.append(image)
+        if self.print_avg == 1:
+            print(np.mean(np.mean(image)))
+        return np.mean(np.mean(image))
 
     def filtered_average_intensity(self):
         b, a = signal.butter(5, 0.025)
@@ -51,7 +54,8 @@ class MUCamera:
         plt.show()
 
     def daytime(self, threshold=75):
-        img = self.MU.grab_image()
+        time.sleep(2)
+        img = self.img[-1]
         intensity = np.mean(np.mean(img))
         if intensity < threshold:
             return False
@@ -65,15 +69,14 @@ class MUCamera:
 
     def stop(self):
         self.MU.stop()
-        # self.filtered_average_intensity()
-        # self.intensity_plot()
-        # self.daytime()
+        self.filtered_average_intensity()
+        self.intensity_plot()
 
     def motion(self):
-        while len(self.img) < 2:
+        while len(self.img) < 25:
             pass
 
-        img3 = ImageChops.subtract(self.img[-2], self.img[-1])
+        img3 = ImageChops.subtract(self.img[-25], self.img[-1])
         self.euclidean_dist = mth.sqrt(np.sum(np.array(img3.getdata()) ** 2))
 
         if self.euclidean_dist > 8000:
@@ -82,35 +85,35 @@ class MUCamera:
             return False
 
     def highlight_motion(self):
-        while len(self.img) < 2:
+        while len(self.img) < 25:
             pass
 
-        img3 = ImageChops.subtract(self.img[-2], self.img[-1])
+        img3 = ImageChops.subtract(self.img[-25], self.img[-1])
         img2_data = np.asarray(self.img[-1])
         img3_data = np.asarray(img3)
         img2_data.setflags(write=1)
         for i in range(len(img3_data[1, :])):
             for j in range(len(img3_data[:, i])):
                 avg = np.mean(img3_data[j, i])
-                if avg > 55 and j > 250:
+                if avg > 30 and j > 250:
                     img2_data[j, i] = [255, 0, 0]
 
         img_new = Image.fromarray(img2_data, 'RGB')
+        self.img[-25].show()
+        self.img[-1].show()
+        img3.show()
         img_new.show()
 
 
 
 
 if __name__ == '__main__':
-    test = MUCamera()
+    test = MUCamera(print_avg=0)
+    # print(test.average_intensity())
+    print(test.daytime())
     print(test.motion())
     print(test.common_color())
-    test.highlight_motion()
+    # test.highlight_motion()
     # start = time.time()
     # time.sleep(60)
     # test.stop()
-
-
-
-
-

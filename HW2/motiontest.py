@@ -21,7 +21,7 @@ for i in range(len(img3_data[1,:])):
     for j in range(len(img3_data[:,i])):
         avg = np.mean(img3_data[j,i])
         if avg > 55 and j > 250:
-            img2_data[j,i] = [255, 0, 0]
+            img2_data[j, i] = [255, 0, 0]
 
 img_new = Image.fromarray(img2_data, 'RGB')
 img_new.show()
