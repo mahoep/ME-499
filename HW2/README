@@ -1,0 +1,67 @@
+hw2.py has the following dependencies:
+  python3.5 or higher
+  PIL (python imaging library)
+  webcam.py (provided from instructor)
+  numpy
+  matplotlib
+  scipy
+  time
+  statistics
+  math
+
+hw2.py will do the following if the class and functions are called as following:
+  1.  test = MUCamera()
+  2.  print(test.average_intensity())
+  3.  print(test.daytime())
+  4.  print(test.common_color())
+  5.  print(test.motion())
+  6.  test.highlight_motion()
+  7.  print(test.event())
+  8.  time.sleep(120)
+  9. test.stop()
+
+1. Initializes the class and calls the __init__ file. Upon doing so the callback
+      servicer from webcam.py is initialized so webcam images will be retrieved
+      every second or whenever the image becomes ready, whichever happens first.
+      A function called _average_intensity is called with the callback servicer.
+      This function will calculate the average image intensity and append to a
+      list. It will also store the time the image was retrieved and append it
+      in a list as well. Finally the image object is also appended to a list.
+
+2. Prints out the average image intensity of the most recently retrieved image.
+      Will only print once per function call even though the average intensity
+      is being calculated continually.
+
+3. Will determine if it is daytime or nighttime in Corvallis by reading in the
+      most recently calculated average image intensity. It will compare the
+      vale to a threshold and if the value is greater than the threshold it Will
+      return True, otherwise it will return False
+
+4. Will determine the RGB value that occurs the most in the image. The
+      getdata() function returns a list of RGB tuples and the statistics.mode()
+      function finds the value that occurs the most often.
+      In daytime, its (1,1,1)
+
+5. Takes two different webcam images, subtracts them and calculates the euclidean
+      distance between the pixels. If the calculated value is greater than
+      8000, returns True, otherwise False.
+
+6. Takes two different webcam images, subtracts them and highlights the
+      difference in red pixels. Does not work well if there is a large difference
+      in shadows between the two images.
+
+7. Determines if there is an event going on in the quad. Based on the color and
+      euclidean distance between two images in the quad. A retrieved image is
+      cropped and compared an image of the same size that is filled with grey
+      (170, 170, 168) pixels. The euclidean distance is calculated, if the value
+      is greater than 8000, it will return True, otherwise it will return False.
+      Another image of the same cropped size is filled with white, this is the
+      'event' case.
+
+8. Starts a timer so that enough images can be retrieved and processed so that
+      the Butterworth filter works.
+
+9. Runs the stop function which will terminate the callback servicer so images
+      stop being retrieved. Then it will run the filter with the data that was
+      collected an processed and finally will plot both the raw and filtered
+      data.
