@@ -3,144 +3,88 @@
     @author Matthew Hoeper
 '''
 
-from webcam import Webcam
-from PIL import ImageChops
+import webcam, time
 from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.signal as signal
-import time, statistics
-import math as mth
 
 
 class MUCamera:
 
     def __init__(self):
-        self.MU = Webcam()
-        self.img_intensity = []
-        self.img_time = []
-        self.MU.start()
-        self.filtered_average = []
-        self.MU.register_callback(self._average_intensity, 1)
-        self.img = []
-        self.euclidean_dist = None
+        self.image = webcam.Webcam().grab_image()
+        self.imdata = self.image.getdata()
 
-    def _average_intensity(self, image):
-        self.img_intensity.append(np.mean(np.mean(image)))
-        self.img_time.append(time.time())
-        self.img.append(image)
-        return np.mean(np.mean(image))
+    def image_intensity(self):
+        pxlavg = []
+        for i in list(self.imdata):
+            pxlavg.append(np.mean(i))
 
-    def average_intensity(self):
-        while len(self.img_intensity) < 1:
-            pass
-        return self.img_intensity[-1]
+        return np.mean(pxlavg)
+
+    def moving_average(self):
+        avg = []
+        lst_time = []
+        inital_time = time.time()
+        while time.time() < inital_time+120: # May 29th, @ 8:30 am PST
+                now = time.time()
+                pxlavg = []
+
+                for i in list(self.imdata):
+                    pxlavg.append(np.mean(i))
+
+                lst_time.append(now)
+                avg.append(np.mean(pxlavg))
+                time.sleep(1)
+
+        t0 = lst_time[0]
+        lst_time[:] = [x - t0 for x in lst_time]
+
+        return lst_time, avg
 
     def filtered_average_intensity(self):
+        # from https://docs.scipy.org/doc/scipy-1.0.0/reference/generated/scipy.signal.lfilter.html#scipy.signal.lfilter
+        _, avg = self.moving_average()
         b, a = signal.butter(5, 0.025)
         zi = signal.lfilter_zi(b, a)
-        z, _ = signal.lfilter(b, a, self.img_intensity, zi=zi * self.img_intensity[0])
+        z, _ = signal.lfilter(b, a, avg, zi=zi * avg[0])
         z2, _ = signal.lfilter(b, a, z, zi=zi * z[0])
-        self.filtered_average = signal.filtfilt(b, a, self.img_intensity)
+        y = signal.filtfilt(b, a, avg)
+        return y
 
     def intensity_plot(self):
-        t0 = self.img_time[0]
-        t = [(x - t0)/60 for x in self.img_time]
-        y = self.img_intensity
-        y_filtered = self.filtered_average
+        lst_time, avg = self.moving_average()
+        y = self.filtered_average_intensity()
 
-        plt.plot(t, y, 'k', t, y_filtered, 'r--')
-        plt.xlabel('Minutes')
+        plt.plot(lst_time, avg, 'k', lst_time, y, 'r--')
+        plt.xlabel('Minutes (min)')
         plt.ylabel('Average Intensity')
-        plt.legend(('Average Image Intensity', 'Smoothed Average Image Intensity'), loc='best')
-        plt.title('Average Image Intensity from 5:45 PM to 8:30 AM PST, May 29th')
-        plt.grid()
+        plt.legend(('Noisy Signal', 'Filtered Signal'), loc='best')
         plt.show()
 
-    def daytime(self, threshold=75):
-        while len(self.img_intensity) < 1:
-            pass
-        img = self.img[-1]
-        intensity = np.mean(np.mean(img))
+    def daytime(self, threshold=80):
+        intensity = self.image_intensity()
+
         if intensity < threshold:
             return False
         else:
             return True
 
-    def common_color(self):
-        img = self.img[-1].getdata()
-        m = statistics.mode(img)
-        return m
+    def common_color():
+        image = webcam.Webcam().grab_image()
+        pixels = mu_live.getcolors()
 
-    def stop(self):
-        self.MU.stop()
-        self.filtered_average_intensity()
-        self.intensity_plot()
+        most_frequent_pixel = pixels[0]
 
-    def motion(self):
-        while len(self.img) < 25:
-            pass
+        # for count, colour in pixels:
+        #     if count > most_frequent_pixel[0]:
+        #         most_frequent_pixel = (count, colour)
 
-        img1 = self.img[-25]
-        img2 = self.img[-1]
-        img3 = ImageChops.subtract(img1, img2)
-        self.euclidean_dist = mth.sqrt(np.sum(np.array(img3.getdata()) ** 2))
+        return most_frequent_pixel
 
-        if self.euclidean_dist > 8000:
-            return True
-        else:
-            return False
-
-    def highlight_motion(self):
-        while len(self.img) < 25:
-            pass
-        img1 = self.img[-25]
-        img2 = self.img[-1]
-
-        img3 = ImageChops.subtract(img1, img2)
-        img2_data = np.asarray(img2)
-        img3_data = np.asarray(img3)
-        img2_data.setflags(write=1)
-        for i in range(len(img3_data[1, :])):
-            for j in range(len(img3_data[:, i])):
-                avg = np.mean(img3_data[j, i])
-                if avg > 35 and j > 250:
-                    img2_data[j, i] = [255, 0, 0]
-
-        img_new = Image.fromarray(img2_data, 'RGB')
-        img_new.show()
-
-    def event(self):
-        while len(self.img_intensity) < 1:
-            pass
-
-        pxl_coor = (250, 365, 500, 470)
-        img = self.img[-1].crop(pxl_coor)
-        baseline = np.asarray(img)
-        baseline.setflags(write=1)
-
-        for i in range(len(baseline[1, :])):
-            for j in range(len(baseline[:, i])):
-                baseline[j, i] = [170, 170, 168]
-        img_grey = Image.fromarray(baseline, 'RGB')
-        img_compare = ImageChops.subtract(img, img_grey)
-        euclidean_dist = mth.sqrt(np.sum(np.array(img_compare.getdata()) ** 2))
-
-        if euclidean_dist > 8000:
-            return True
-        else:
-            return False
 
 
 if __name__ == '__main__':
     test = MUCamera()
-    # print(test.average_intensity())
-    # print(test.daytime())
-    # print(test.motion())
-    # print(test.common_color())
-    # test.highlight_motion()
-    print(test.event())
-    # start = time.time()
-    # time.sleep(350)
-    # print("stopping...")
-    # test.stop()
+    print(test.image_intensity())
