@@ -14,18 +14,15 @@ img1 = Image.open('E:/Users/Matt/Documents/Programming Projects/ME-499/HW2/image
 img2 = Image.open('E:/Users/Matt/Documents/Programming Projects/ME-499/HW2/images/MU_1527554448.4631853.jpg')
 
 img3 = ImageChops.subtract(img1, img2)
-# img3.show()
+img2_data = np.asarray(img2)
+img3_data = np.asarray(img3)
+img2_data.setflags(write=1)
+for i in range(len(img3_data[1,:])):
+    for j in range(len(img3_data[:,i])):
+        avg = np.mean(img3_data[j,i])
+        if avg > 55 and j > 250:
+            img2_data[j,i] = [255, 0, 0]
 
-pxldata = np.asarray(img3)
-copy = np.asarray(img3)
-copy.setflags(write=1)
-for i in range(len(pxldata[1,:])):
-    for j in range(len(pxldata[:,i])):
-        avg = np.mean(pxldata[j,i])
-        if avg > 55:
-            copy[j,i] = [255, 0, 0]
-
-
-img_new = Image.fromarray(copy, 'RGB')
+img_new = Image.fromarray(img2_data, 'RGB')
 img_new.show()
 

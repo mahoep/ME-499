@@ -85,17 +85,17 @@ class MUCamera:
         while len(self.img) < 2:
             pass
 
-        img3 = ImageChops.subtract(self.img[0], self.img[1])
-        pxldata = np.asarray(img3)
-        copy = np.asarray(img3)
-        copy.setflags(write=1)
-        for i in range(len(pxldata[1, :])):
-            for j in range(len(pxldata[:, i])):
-                avg = np.mean(pxldata[j, i])
-                if avg > 55:
-                    copy[j, i] = [255, 0, 0]
+        img3 = ImageChops.subtract(img1, img2)
+        img2_data = np.asarray(img2)
+        img3_data = np.asarray(img3)
+        img2_data.setflags(write=1)
+        for i in range(len(img3_data[1, :])):
+            for j in range(len(img3_data[:, i])):
+                avg = np.mean(img3_data[j, i])
+                if avg > 55 and j > 250:
+                    img2_data[j, i] = [255, 0, 0]
 
-        img_new = Image.fromarray(copy, 'RGB')
+        img_new = Image.fromarray(img2_data, 'RGB')
         img_new.show()
 
 
