@@ -164,6 +164,10 @@ class MUCamera:
         Determines if there is an event going on in the quad. Based on the color and euclidean distance of
         two images in the quad
         :return: True if there is an event, false if otherwise
+        Also displays the test cases.
+        :return The image with the grey square is the baseline from which everything is compared to. The grey was the most
+        common color in a cropped version of the size of the square
+        :return The image with the white square is the case where there is an event
         '''
         while len(self.img_intensity) < 1:
             pass
@@ -205,16 +209,16 @@ class MUCamera:
 
 if __name__ == '__main__':
     test = MUCamera()
-    # print(test.average_intensity())
-    # print(test.daytime())
-    # print(test.motion())
-    # print(test.common_color())
-    # test.highlight_motion()
+    print(test.average_intensity())
+    print(test.daytime())
+    print(test.motion())
+    print(test.common_color())
+    test.highlight_motion()
     print(test.event())
-    # start = time.time()
-    # time.sleep(350)
-    # print("stopping...")
-    # test.stop()
+    start = time.time()
+    time.sleep(120)
+    print("stopping...")
+    test.stop()
 
 
 
