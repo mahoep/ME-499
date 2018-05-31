@@ -21,18 +21,23 @@ class MUCamera:
         self.img_time = []
         self.MU.start()
         self.filtered_average = []
-        self.MU.register_callback(self.average_intensity, 1)
+        self.MU.register_callback(self._average_intensity, 1)
         self.img = []
         self.euclidean_dist = None
         self.print_avg = print_avg
 
-    def average_intensity(self, image):
+    def _average_intensity(self, image):
         self.img_intensity.append(np.mean(np.mean(image)))
         self.img_time.append(time.time())
         self.img.append(image)
         if self.print_avg == 1:
             print(np.mean(np.mean(image)))
         return np.mean(np.mean(image))
+
+    def average_intensity(self):
+        while len(self.img_intensity) < 1:
+            pass
+        return self.img_intensity[-1]
 
     def filtered_average_intensity(self):
         b, a = signal.butter(5, 0.025)
@@ -111,7 +116,7 @@ class MUCamera:
 
 if __name__ == '__main__':
     test = MUCamera(print_avg=0)
-    # print(test.average_intensity())
+    print(test.average_intensity())
     # print(test.daytime())
     # print(test.motion())
     # print(test.common_color())
