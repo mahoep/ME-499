@@ -78,7 +78,9 @@ class MUCamera:
         while len(self.img) < 25:
             pass
 
-        img3 = ImageChops.subtract(self.img[-25], self.img[-1])
+        img1 = self.img[-25]
+        img2 = self.img[-1]
+        img3 = ImageChops.subtract(img1, img2)
         self.euclidean_dist = mth.sqrt(np.sum(np.array(img3.getdata()) ** 2))
 
         if self.euclidean_dist > 8000:
@@ -89,33 +91,31 @@ class MUCamera:
     def highlight_motion(self):
         while len(self.img) < 25:
             pass
+        img1 = self.img[-25]
+        img2 = self.img[-1]
 
-        img3 = ImageChops.subtract(self.img[-25], self.img[-1])
-        img2_data = np.asarray(self.img[-1])
+        img3 = ImageChops.subtract(img1, img2)
+        img2_data = np.asarray(img2)
         img3_data = np.asarray(img3)
         img2_data.setflags(write=1)
         for i in range(len(img3_data[1, :])):
             for j in range(len(img3_data[:, i])):
                 avg = np.mean(img3_data[j, i])
-                if avg > 30 and j > 250:
+                if avg > 35 and j > 250:
                     img2_data[j, i] = [255, 0, 0]
 
         img_new = Image.fromarray(img2_data, 'RGB')
-        self.img[-25].show()
-        self.img[-1].show()
-        img3.show()
         img_new.show()
-
 
 
 
 if __name__ == '__main__':
     test = MUCamera(print_avg=0)
     # print(test.average_intensity())
-    print(test.daytime())
-    print(test.motion())
-    print(test.common_color())
-    # test.highlight_motion()
+    # print(test.daytime())
+    # print(test.motion())
+    # print(test.common_color())
+    test.highlight_motion()
     # start = time.time()
     # time.sleep(60)
     # test.stop()
