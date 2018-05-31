@@ -15,7 +15,7 @@ import math as mth
 
 class MUCamera:
 
-    def __init__(self, print_avg=0):
+    def __init__(self):
         self.MU = Webcam()
         self.img_intensity = []
         self.img_time = []
@@ -24,14 +24,11 @@ class MUCamera:
         self.MU.register_callback(self._average_intensity, 1)
         self.img = []
         self.euclidean_dist = None
-        self.print_avg = print_avg
 
     def _average_intensity(self, image):
         self.img_intensity.append(np.mean(np.mean(image)))
         self.img_time.append(time.time())
         self.img.append(image)
-        if self.print_avg == 1:
-            print(np.mean(np.mean(image)))
         return np.mean(np.mean(image))
 
     def average_intensity(self):
@@ -61,7 +58,8 @@ class MUCamera:
         plt.show()
 
     def daytime(self, threshold=75):
-        time.sleep(2)
+        while len(self.img_intensity) < 1:
+            pass
         img = self.img[-1]
         intensity = np.mean(np.mean(img))
         if intensity < threshold:
@@ -115,12 +113,13 @@ class MUCamera:
 
 
 if __name__ == '__main__':
-    test = MUCamera(print_avg=0)
+    test = MUCamera()
     print(test.average_intensity())
-    # print(test.daytime())
-    # print(test.motion())
-    # print(test.common_color())
+    print(test.daytime())
+    print(test.motion())
+    print(test.common_color())
     test.highlight_motion()
-    # start = time.time()
-    # time.sleep(60)
-    # test.stop()
+    start = time.time()
+    time.sleep(350)
+    print("stopping...")
+    test.stop()
