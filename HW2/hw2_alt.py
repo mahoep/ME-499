@@ -85,8 +85,8 @@ class MUCamera:
         while len(self.img) < 2:
             pass
 
-        img3 = ImageChops.subtract(img1, img2)
-        img2_data = np.asarray(img2)
+        img3 = ImageChops.subtract(self.img[-2], self.img[-1])
+        img2_data = np.asarray(self.img[-1])
         img3_data = np.asarray(img3)
         img2_data.setflags(write=1)
         for i in range(len(img3_data[1, :])):
