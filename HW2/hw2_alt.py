@@ -110,16 +110,37 @@ class MUCamera:
         img_new = Image.fromarray(img2_data, 'RGB')
         img_new.show()
 
+    def event(self):
+        while len(self.img_intensity) < 1:
+            pass
+
+        pxl_coor = (250, 365, 500, 470)
+        img = self.img[-1].crop(pxl_coor)
+        baseline = np.asarray(img)
+        baseline.setflags(write=1)
+
+        for i in range(len(baseline[1, :])):
+            for j in range(len(baseline[:, i])):
+                baseline[j, i] = [170, 170, 168]
+        img_grey = Image.fromarray(baseline, 'RGB')
+        img_compare = ImageChops.subtract(img, img_grey)
+        euclidean_dist = mth.sqrt(np.sum(np.array(img_compare.getdata()) ** 2))
+
+        if euclidean_dist > 8000:
+            return True
+        else:
+            return False
 
 
 if __name__ == '__main__':
     test = MUCamera()
-    print(test.average_intensity())
-    print(test.daytime())
-    print(test.motion())
-    print(test.common_color())
-    test.highlight_motion()
-    start = time.time()
-    time.sleep(350)
-    print("stopping...")
-    test.stop()
+    # print(test.average_intensity())
+    # print(test.daytime())
+    # print(test.motion())
+    # print(test.common_color())
+    # test.highlight_motion()
+    print(test.event())
+    # start = time.time()
+    # time.sleep(350)
+    # print("stopping...")
+    # test.stop()
