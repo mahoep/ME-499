@@ -61,9 +61,11 @@ def moving_average():
     y = signal.filtfilt(b, a, avg)
 
     plt.plot(lst_time, avg, 'k',lst_time, y, 'r--')
-    plt.xlabel('Minutes (min)')
+    plt.xlabel('Minutes')
     plt.ylabel('Average Intensity')
-    plt.legend(('Noisy Signal', 'Filtered Signal'), loc='best')
+    plt.legend(('Average Image Intensity', 'Smoothed Average Image Intensity'), loc='best')
+    plt.title('Average Image Intensity from 5:45 PM to 8:30 AM PST, May 29th')
+    plt.grid()
     plt.show()
 
 
