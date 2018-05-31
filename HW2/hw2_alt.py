@@ -19,25 +19,24 @@ class MUCamera:
         self.img_time = []
         self.MU.start()
         self.start = time.time()
+        self.filtered_average = []
         self.MU.register_callback(self.average_intensity, 1)
 
     def average_intensity(self, image):
         self.img_intensity.append(np.mean(np.mean(image)))
         self.img_time.append(time.time())
 
-
-
     def filtered_average_intensity(self):
         b, a = signal.butter(5, 0.025)
         zi = signal.lfilter_zi(b, a)
-        z, _ = signal.lfilter(b, a, avg, zi=zi * self.img_intensity[0])
+        z, _ = signal.lfilter(b, a, self.img_intensity, zi=zi * self.img_intensity[0])
         z2, _ = signal.lfilter(b, a, z, zi=zi * z[0])
-        self.filtered_average_intensity = signal.filtfilt(b, a, self.img_intensity)
+        self.filtered_average = signal.filtfilt(b, a, self.img_intensity)
 
     def intensity_plot(self):
         t = self.img_time
         y = self.img_intensity
-        y_filtered = self.filtered_average_intensity
+        y_filtered = self.filtered_average
 
         plt.plot(t, y, 'k', t, y_filtered, 'r--')
         plt.xlabel('Minutes (min)')
@@ -51,11 +50,12 @@ class MUCamera:
         self.intensity_plot()
 
 
+
 if __name__ == '__main__':
     test = MUCamera()
     start = time.time()
-    if time.time() > start + 120:
-        MUCamera.stop()
+    time.sleep(60)
+    test.stop()
 
 
 
