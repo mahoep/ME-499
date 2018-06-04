@@ -16,20 +16,27 @@ def optimize_step(f, bounds, n):
 
     low = bounds[0]
     up = bounds[1]
-    f_chuncked = np.array_split(f, n)
+    x = np.linspace(low, up, 10000)
+    y = f(x)
+    y_chuncks = np.array_split(y, n)
     max_lst = []
-    for i in f_chuncked:
+    idx_lst = []
+    for i in y_chuncks:
         max_lst.append(max(i))
-    value = max(max_lst)
-    return value
+        idx_lst.append(np.argmax(i))
+    max_chunk = np.argmax(max_lst)
+    max_idx = idx_lst[max_chunk]
+    x_max = len(y_chuncks[0])*(max_chunk) + max_idx
+
+    return x[x_max]
 
 
+def func(x):
+    return -x**2
 
 if __name__ == '__main__':
-    t = np.linspace(-1000, 1000, 10000)
-    f = 3*t**2 - 18*t + 8
 
-    bounds = (-10, 20)
+    bounds = (-10, 10)
     n = 25
-    new = optimize_step(f, bounds, n)
+    new = optimize_step(func, bounds, n)
     print(new)
