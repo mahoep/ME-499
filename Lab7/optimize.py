@@ -14,6 +14,22 @@ def optimize_step(f, bounds, n):
     :return: returning the x value of the largest one
     '''
 
+    low = bounds[0]
+    up = bounds[1]
+    f_chuncked = np.array_split(f, n)
+    max_lst = []
+    for i in f_chuncked:
+        max_lst.append(max(i))
+    value = max(max_lst)
+    return value
+
+
 
 if __name__ == '__main__':
-    f = 
+    t = np.linspace(-1000, 1000, 10000)
+    f = 3*t**2 - 18*t + 8
+
+    bounds = (-10, 20)
+    n = 25
+    new = optimize_step(f, bounds, n)
+    print(new)
