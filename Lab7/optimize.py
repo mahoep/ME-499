@@ -4,6 +4,8 @@
 '''
 
 import numpy as np
+from scipy.optimize import minimize_scalar
+from matplotlib import pyplot as plt
 
 def optimize_step(f, bounds, n):
     '''
@@ -46,15 +48,46 @@ def optimize_random(f, bounds, n):
     return max
 
 
+def max_scalar(f, bounds, n):
+    low = bounds[0]
+    up = bounds[1]
+    max_value = minimize_scalar(lambda x: -f(x), bounds=(low, up), method='bounded', options={'maxiter':n})
+    return max_value
+
+
 def func(x):
-    return -x**2
+    return np.sin(x)
+
+
+def grapher():
+    max = 0
+    max_real = 1
+    error = []
+    n_val = np.linspace(0, 24999, 25000)
+
+    for i in range(n):
+        low = bounds[0]
+        up = bounds[1]
+        num = np.random.random_integers(low, up) + np.random.random()
+        y = func(num)
+        error.append(abs(max_real - y))
+        if y > max:
+            max = num
+        else:
+            pass
+    plt.plot(n_val,error)
+    plt.show()
+
 
 
 if __name__ == '__main__':
 
     bounds = (-5, 5)
-    n = 2500
+    n = 25000
     # step = optimize_step(func, bounds, n)
     # print(new)
-    rand = optimize_random(func, bounds, n)
-    print(rand)
+    # rand = optimize_random(func, bounds, n)
+    # print(rand)
+    # builtin = max_scalar(func, bounds, n)
+    # print(builtin)
+    grapher()
