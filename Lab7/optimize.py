@@ -90,4 +90,4 @@ if __name__ == '__main__':
     # print(rand)
     # builtin = max_scalar(func, bounds, n)
     # print(builtin)
-    grapher()
+    # grapher()
