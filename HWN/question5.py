@@ -5,18 +5,19 @@
 
 import numpy as np
 
+
 class Polygon:
     def __init__(self, n, side_len=1):
         self.names = {3: 'Triangle', 4: 'Square', 5: 'Pentagon', 6: 'Hexagon'}
 
-        if isinstance(n, int):
+        if n % 1 == 0:
             self.n = n
             self.side_len = side_len
             self.perimeter = 1*side_len
             if n < 3:
                 raise TypeError('A polygon has minimum of 3 sides')
         else:
-            raise TypeError('n must be an integer')
+            raise TypeError('n must be a whole number')
 
     def __str__(self):
         try:
@@ -32,7 +33,7 @@ class Polygon:
 
 
 if __name__ == '__main__':
-    s = Polygon(5)
+    s = Polygon(5.0)
     print(s.area())
     print(s)
 
