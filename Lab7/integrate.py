@@ -39,14 +39,27 @@ def integrate_mc(f, bounds, n):
     area = under/(under+above)*area_box
     return area
 
+
 def func(x):
-    return x
+    return 2*x**2
 
 
 if __name__ == '__main__':
 
-    bounds = (0, 1)
-    n = 250000
-
-    area = integrate_mc(func, bounds, n)
-    print(area)
+    bounds = (0, 2)
+    n = [10, 100, 1e3, 1e4, 1e5, 1e6, 1e7]
+    n = [int(x) for x in n]
+    area = []
+    diff = []
+    area_actual = 16/3
+    for i in n:
+        ans = integrate_mc(func, bounds, i)
+        area.append(ans)
+        diff.append(abs(area_actual-ans))
+    plt.semilogx(n, diff)
+    plt.grid()
+    plt.xlabel('Number of Samples')
+    plt.ylabel('Error from Actual Value')
+    plt.title('Error vs. Number of Samples for Monte Carlo Integration of 2x^2')
+    plt.show()
+    # print(area)
