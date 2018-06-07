@@ -15,7 +15,7 @@ def pi_mc(n):
         y = np.random.uniform(-1, 1)
         r = np.sqrt(x**2 + y**2)
 
-        if r < 1:
+        if r <= 1:
             inside += 1
         else:
             outside += 1
@@ -24,17 +24,23 @@ def pi_mc(n):
     return mypi
 
 
-def func(x, y):
-    return np.sqrt(x**2 + y**2)
-
-
 if __name__ == '__main__':
     import matplotlib.pyplot as plt
 
-    n = 250000
+    n = 25000
+    print('estimate =', pi_mc(n), ' | ', 'difference =', abs(pi_mc(n)-np.pi))
     # mypi = []
-    # for i in range(100):
+    # dif = []
+    # n_tests = 100
+    # for i in range(n_tests):
     #     mypi.append(pi_mc(n))
+    #     dif.append(pi_mc(n)-np.pi)
     #
-    # plt.hist(mypi)
+    # plt.scatter(mypi, dif)
+    # plt.axhline(y=0, color='k')
+    # plt.grid()
+    # plt.xlabel("Estimated value of pi")
+    # plt.ylabel("Difference from built in value of pi")
+    # plt.suptitle("Distribution of {} estimates of pi using Monte Carlo Integration".format(n_tests))
+    # plt.title('n = {} for each estimate of pi'.format(n))
     # plt.show()
