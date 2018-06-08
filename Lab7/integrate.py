@@ -31,6 +31,7 @@ def integrate_mc(f, bounds, n):
     for i in range(n):
         xrand = np.random.uniform(xlow, xup)
         yrand = np.random.uniform(ylow, yup)
+
         if yrand <= f(xrand):
             under += 1
         else:
@@ -41,25 +42,25 @@ def integrate_mc(f, bounds, n):
 
 
 def func(x):
-    return 2*x**2
+    return x**3+2
 
 
 if __name__ == '__main__':
 
-    bounds = (0, 2)
-    n = [10, 100, 1e3, 1e4, 1e5, 1e6, 1e7]
+    bounds = (0, 1)
+    n = np.linspace(5000, 200000, 25)
     n = [int(x) for x in n]
     area = []
     diff = []
-    area_actual = 16/3
+    area_actual = 2.25
     for i in n:
         ans = integrate_mc(func, bounds, i)
         area.append(ans)
         diff.append(abs(area_actual-ans))
-    plt.semilogx(n, diff)
+    plt.plot(n, diff)
     plt.grid()
     plt.xlabel('Number of Samples')
     plt.ylabel('Error from Actual Value')
-    plt.title('Error vs. Number of Samples for Monte Carlo Integration of 2x^2')
+    plt.title('Error vs. Number of Samples for Monte Carlo Integration of x**3+2 over [0,1]')
     plt.show()
     # print(area)
