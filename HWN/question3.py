@@ -21,26 +21,11 @@ def pi_mc(n):
             outside += 1
 
     mypi = inside/(inside+outside)/(circle_radius**2)
-    return mypi
+    diff = abs(mypi-np.pi)
+    return mypi, diff
 
 
 if __name__ == '__main__':
-    import matplotlib.pyplot as plt
-
     n = 25000
-    print('estimate =', pi_mc(n), ' | ', 'difference =', abs(pi_mc(n)-np.pi))
-    # mypi = []
-    # dif = []
-    # n_tests = 100
-    # for i in range(n_tests):
-    #     mypi.append(pi_mc(n))
-    #     dif.append(pi_mc(n)-np.pi)
-    #
-    # plt.scatter(mypi, dif)
-    # plt.axhline(y=0, color='k')
-    # plt.grid()
-    # plt.xlabel("Estimated value of pi")
-    # plt.ylabel("Difference from built in value of pi")
-    # plt.suptitle("Distribution of {} estimates of pi using Monte Carlo Integration".format(n_tests))
-    # plt.title('n = {} for each estimate of pi'.format(n))
-    # plt.show()
+    mypi, diff = pi_mc(n)
+    print('estimate =', mypi, ' | ', 'difference =', diff)
